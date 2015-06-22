@@ -27,7 +27,7 @@
 #
 # If you're making a new patch release and you don't want to upload the whole new apps (which is
 # slow, given their size), you can choose the "fast cafe option" (-f) and use this script to just
-#  upload changes: ./make.py -f -m "msg" -b 1.0.0
+# upload changes: ./make.py -f -m "msg" -b 1.0.0
 #
 # ------
 #
@@ -39,7 +39,7 @@
 # If you're building a patch version (1.0.0 -> 1.0.1) and you want to upload from here,
 # also supply the "base version" (ie, 1.0.0 in the above example). This will then upload the
 # changefiles so users can do inplace upgrades. Except for testing, there's no good reason to not
-#  do this when using -m to FTP from here.
+# do this when using -m to FTP from here.
 #
 # You can skip doc building with --skip-docs. There's no good reason to do this unless you're
 # certain the docs haven't changed. It makes things slightly faster. You might choose this when
@@ -47,12 +47,12 @@
 # been made.
 #
 # You can skip building with -s. This is only useful if you want to use the FTP system from here;
-#  it basically just patches you through to FTP without building docs the app. You *must* have
+# it basically just patches you through to FTP without building docs the app. You *must* have
 # run this once before successfully for the version in question. This is kind of a dumb option.
 #
 # You can use a "fast" build with -f. This does not build the real app (ie, the Mac clickable
 # app) but it does package things up so that you can use -m -b. This is only useful if you wanted
-#  to release a patch version that doesn't have a corresponding full app version being uploaded.
+# to release a patch version that doesn't have a corresponding full app version being uploaded.
 # This might be useful if there's an patch-level bugfix where you don't want to or can't afford
 # to upload the whole clickable app.
 
@@ -102,8 +102,8 @@ def build(name, fast=False, make_docs=True):
     print("\n\n")
     print("-" * 40, name)
 
-    # Update on disk the utils.py module to change the NAME variable
-    # to the name of the product we're building.
+    # Update on disk the utils.py module to change the NAME variable to the name of the product
+    # we're building.
 
     _utils = NAMERE.sub('NAME = "%s"' % name, utils)
 
@@ -113,13 +113,12 @@ def build(name, fast=False, make_docs=True):
     if fast:
 
         # Don't build a app; just make an zip file of the pyo modules--useful when uploading just
-        #  a bugfix version which the inplace upgrader can use.
+        # a bugfix version which the inplace upgrader can use.
         #
         # This can only be run on a Mac (or maybe Linux; untested)
 
         if make_docs:
-            os.system("sphinx-build -b singlehtml -d help/_build/doctrees"
-                      " help xsocius/help")
+            os.system("sphinx-build -b singlehtml -d help/_build/doctrees help xsocius/help")
             decrap_help(name)
         try:
             shutil.rmtree('build')
@@ -144,38 +143,37 @@ def build(name, fast=False, make_docs=True):
 
         # Now put just the .pyo files in the zipfile (skip over the .py)
 
-        with zipfile.ZipFile("upload/%s-%s-sp.zip" %
-                                     (name.lower(), version),
+        with zipfile.ZipFile("upload/%s-%s-sp.zip" % (name.lower(), version),
                              "w",
                              zipfile.ZIP_DEFLATED) as zf:
-            for i in (glob.glob("build/lib/xsocius/*.pyo") +
-                          glob.glob("build/lib/xsocius/gui/*.pyo")):
+            for i in [
+                        glob.glob("build/lib/xsocius/*.pyo") +
+                        glob.glob("build/lib/xsocius/gui/*.pyo")
+            ]:
                 zf.write(i, i[len("build/lib/"):])
 
         # Copy built library files to dist (XXX: why?)
         os.system("mkdir dist/%s" % name)
         os.system("mv build/lib dist/%s/" % name)
 
-
     elif wx.Platform == "__WXMSW__":
 
         # Windows: make docs, make exe, turn into installer
 
         if make_docs:
-            os.system("c:\\Python34\Scripts\\sphinx-build.exe -b singlehtml"
-                      " -d help\\_build\\doctrees help xsocius\\help")
+            os.system(r"c:\Python34\Scripts\sphinx-build.exe -b singlehtml"
+                      r" -d help\_build\doctrees help xsocius\help")
             decrap_help(name)
         try:
             shutil.rmtree('build')
         except:
             pass
 
-        os.system("c:\\Python34\python -OO setup.py build_exe")
-        os.system('"c:\\Program Files (x86)\\Inno Setup 5\\ISCC.exe"'
-                  ' build\\exe.win32-3.3\\installer.iss')
-        shutil.copyfile("build/exe.win32-3.3/Output/setup.exe",
+        os.system(r"python -OO setup.py build_exe")
+        os.system(
+            r'"c:\Program Files (x86)\Inno Setup 5\ISCC.exe" build\exe.win32-3.4\installer.iss')
+        shutil.copyfile("build/exe.win32-3.4/Output/setup.exe",
                         "upload/%s-%s.exe" % (name.lower(), version))
-
 
     elif wx.Platform == "__WXMAC__":
 
@@ -183,8 +181,7 @@ def build(name, fast=False, make_docs=True):
         #      make dmg and THEN bdist_egg
 
         if make_docs:
-            os.system("sphinx-build -b singlehtml -d help/_build/doctrees"
-                      " help xsocius/help")
+            os.system("sphinx-build -b singlehtml -d help/_build/doctrees help xsocius/help")
             decrap_help(name)
         try:
             shutil.rmtree('build')
@@ -211,17 +208,15 @@ def build(name, fast=False, make_docs=True):
         os.system("cp dist/*egg upload/%s-%s.egg" %
                   (name.lower(), version))
 
-
     elif wx.Platform == "__WXGTK__":
 
-        # Linx: make docs, make bdist_egg
+        # Linux: make docs, make bdist_egg
 
         if make_docs:
-            os.system("sphinx-build-3.3 -b singlehtml -d help/_build/doctrees"
-                      " help xsocius/help")
+            os.system("sphinx-build-3.4 -b singlehtml -d help/_build/doctrees help xsocius/help")
             decrap_help(name)
         os.system("rm dist/*egg")
-        os.system("python2.7 setup.py bdist_egg")
+        os.system("python3.4 setup.py bdist_egg")
         os.system("cp dist/*egg upload/%s-%s.egg" % (name.lower(), version))
 
 

@@ -89,18 +89,24 @@ class PuzzleWindow(BaseWindow,
     def __init__(self, title, pos=(-1, -1), size=(700, 500), minsize=(700, 500)):
         """Setup window and sub-panels."""
 
+        logging.debug("in PuzzleWindow __init__")
         BaseWindow.__init__(self, title, pos, size=size)
+        logging.debug("done base")
         UndoRedoMixin.__init__(self)
         ClipboardMixin.__init__(self)
         ShareWindowMixin.__init__(self)
         PrintMixin.__init__(self)
+        logging.debug("done mixins")
 
         self.SetMenuBar(PuzzleMenuBar(self))
+        logging.debug("done menubar")
         # self.ShowFullScreen(True)
 
         self.splitter = MultiSplitterWindow(self, style=wx.SP_LIVE_UPDATE)
+        logging.debug("made splitter")
         self.share_panel = SharingPanel(self.splitter)
         self.puzzle_panel = wx.Panel(self.splitter, wx.ID_ANY)
+        logging.debug("done panels")
 
         if wx.Platform == "__WXMAC__":
             # This seems a little self-evident, but it needed to workaround
@@ -115,6 +121,7 @@ class PuzzleWindow(BaseWindow,
         self.splitter.AppendWindow(self.puzzle_panel, 250)
         self.splitter.DetachWindow(self.share_panel)
         self.share_panel.Hide()
+        logging.debug("done splitter")
 
         minw, minh = minsize
         if wx.GetApp().config.show_clues:

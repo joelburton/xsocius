@@ -47,7 +47,10 @@ def oh_fuck(typ, val, tb):
     """Uncaught exception handler."""
 
     tbs = "".join(traceback.format_exception(typ, val, tb))
-    sys.stderr.write(tbs)
+    try:
+        sys.stderr.write(tbs)
+    except:
+        pass
     # write error to file
     try:
         with open(log_path('crash'), 'w') as f:

@@ -1,5 +1,7 @@
 """Base window for puzzle windows and dummy window."""
 
+import logging
+
 import wx
 
 from xsocius.gui.menu import DummyMenuBar
@@ -27,6 +29,7 @@ class BaseWindow(wx.Frame, JoinWindowMixin):
                           pos=pos,
                           style=style,
                           size=size)
+
         JoinWindowMixin.__init__(self)
 
         # Doesn't appear on OSX as of wx2.9

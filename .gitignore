@@ -8,7 +8,12 @@ build/
 dist/
 upload/
 __pycache__
+.idea
+.DS_Store
+/env-win/
 *.egg-info
+*.pyc
 
 /xsocius/help
 /help/_build
+unlocker.c

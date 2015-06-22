@@ -83,6 +83,7 @@ class XsociusApp(wx.App):
         # If our preferences say to do so, re-open windows
 
         if self.config.reopen:
+            logging.debug("trying to reopen")
             for path in self.config.unpersistWindows():
                 try:
                     self.open_puzzle(path)
@@ -91,6 +92,7 @@ class XsociusApp(wx.App):
 
         # Check our config to see what we should do on open
         # (show web dialog, file dialog, open most recent puzzle, or nothing)
+        logging.debug("check to see what to do on open")
 
         if not self.windows:
             method = self.config.openmethod
@@ -124,7 +126,7 @@ class XsociusApp(wx.App):
         # This catches events when the app is asked to activate by some other
         # process
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
-
+        logging.debug("Leaving OnInit")
         return True
 
     def show_tip_of_the_day(self):
@@ -173,8 +175,11 @@ class XsociusApp(wx.App):
             x += 20
             y += 20
 
+        logging.debug("about to open new window pos=%s size=%s minsize=%s" % (
+                (x,y), size, minsize))
         window = PuzzleWindow(title=title, pos=(x, y), size=size,
                               minsize=minsize)
+        logging.debug("window opened")
         self.windows.append(window)
         return window
 
@@ -220,6 +225,7 @@ class XsociusApp(wx.App):
         logging.debug("Opening size w=%s, h=%s", w, h)
 
         self.config.addRecentFile(path)
+        logging.debug("recent files added")
 
         if reuse_window:
             window = self
@@ -228,7 +234,9 @@ class XsociusApp(wx.App):
                 title=puzzle.filename_no_ext,
                 size=(w, h),
                 minsize=(minw, minh))
+        logging.debug("new window created")
         window.setupPuzzle(puzzle, as_unsolved)
+        logging.debug("Raising window")
         window.Raise()
         wx.GetApp().SetTopWindow(window)
         return window

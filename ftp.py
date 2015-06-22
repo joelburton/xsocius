@@ -4,19 +4,16 @@
 
 # IMPORTANT USAGE INFO:
 #
-# This should be called *after* you've run make.py under both Mac OSX
-# and Windows.
+# This should be called *after* you've run make.py under both Mac OSX and Windows.
 #
-# You can upload only one name (ie, MooseWords) but the default option
-# is to upload all builders. This will take longer to upload, of course.
+# You can upload only one name (ie, MooseWords) but the default option is to upload all builders.
+#  This will take longer to upload, of course.
 #
-# You must pass in -m for the change message. Users see this when
-# they are told of an upgrade.
+# You must pass in -m for the change message. Users see this when they are told of an upgrade.
 #
-# If you are adding a patch-level upgrade (1.0.0 -> 1.0.1), you can use
-# the -b option to specify the base version (1.0.0 in this example).
-# Then users on OSX/Windows can use the inplace lightweight update.
-# Without this option, they cannot.
+# If you are adding a patch-level upgrade (1.0.0 -> 1.0.1), you can use the -b option to specify
+# the base version (1.0.0 in this example). Then users on OSX/Windows can use the inplace
+# lightweight update. Without this option, they cannot.
 
 import sys
 import ftplib
@@ -29,6 +26,7 @@ from xml.etree import ElementTree
 
 import os
 import tempfile
+
 from xsocius.utils import VERSION
 from make import ALL
 
@@ -52,17 +50,17 @@ def walk_to_path(top):
 def make_change(name, old_ver, version, new=None):
     """Make .zip for help changes and all in new library."""
 
-    # To compare the old version to the new version, we'll always use
-    # the old version full app stored in upload -- if, for some reason,
-    # this is gone, it must be recreated by running make for that version.
+    # To compare the old version to the new version, we'll always use the old version full app
+    # stored in upload -- if, for some reason, this is gone, it must be recreated by running make
+    # for that version.
 
     old = "upload/%s-%s.app" % (name, old_ver)
 
     if not new:
         # Regular make
         #
-        # To compare the new version to the base version, we'll use the
-        # built app for new version in upload.
+        # To compare the new version to the base version, we'll use the built app for new version
+        #  in upload.
 
         new = "upload/%s-%s.app" % (name, version)
         new_lib = new + LIB
@@ -70,12 +68,12 @@ def make_change(name, old_ver, version, new=None):
     else:
         # "Fast" make, where a real app wasn't built.
         #
-        # The help files are slightly different places here on disk--what
-        # gets made out of this will be the same, though.
+        # The help files are slightly different places here on disk--what gets made out of this
+        # will be the same, though.
 
         new = new % {'name': name}
         new_lib = "upload/%s-%s-sp.zip" % (name.lower(), version)
-        old = old + "/Contents/Resources/help/"
+        old += "/Contents/Resources/help/"
         help_head = ""
 
     # If we can't find either of old/new, die
@@ -88,7 +86,7 @@ def make_change(name, old_ver, version, new=None):
         print("** FATAL doesn't exist: %s" % new)
         sys.exit()
 
-    ## Check for breaking differences and note any help differences
+    # Check for breaking differences and note any help differences
 
     old_files = frozenset(walk_to_path(old))
     new_files = frozenset(walk_to_path(new))
@@ -106,10 +104,9 @@ def make_change(name, old_ver, version, new=None):
 
     # Gather help differences
     #
-    # Find all differences in apps; only tolerate
-    # help differences (note), site-packages.zip (dealt with later),
-    # and root/site.pyo (since it changes when app is run, and
-    # we don't care about it)
+    # Find all differences in apps; only tolerate help differences (note), site-packages.zip (
+    # dealt with later), and root/site.pyo (since it changes when app is run, and we don't care
+    # about it)
     #
     # All others cause failure
 
@@ -122,8 +119,7 @@ def make_change(name, old_ver, version, new=None):
             or fname.endswith('.so')
             or fname.endswith('.dylib')
             or fname.endswith('.buildinfo')
-            or fname.endswith('/Python')  # dunno why but sometimes Python interp changes?
-            ):
+            or fname.endswith('/Python')):  # dunno why but sometimes Python interp changes?
             continue
 
         ofile = open(old + fname, 'rb')
@@ -161,9 +157,9 @@ def make_change(name, old_ver, version, new=None):
         # can patch/care about
         lib = tempfile.mkdtemp()
         with ZipFile(path, 'r') as libzip:
-            libzip.extractall(lib,
-                              [f for f in libzip.namelist()
-                               if 'xsocius' in f and f.endswith('.pyo')])
+            libzip.extractall(
+                lib,
+                [f for f in libzip.namelist() if 'xsocius' in f and f.endswith('.pyo')])
         return lib + "/"
 
     # Get locations to unzipped xsocius pyo files for old & new
@@ -185,7 +181,7 @@ def make_change(name, old_ver, version, new=None):
 
     # Return path to helpzip and libzip
 
-    return (help_path, lib_path)
+    return help_path, lib_path
 
 # ------------------------------------- UPLOADING STUFF
 
@@ -247,7 +243,7 @@ def dot(x):
 
 def stor_file(name, ftp, fname, path=None):
     """Upload file to FTP server.
-    
+
     name = name of program (eg, MooseWords)
     ftp = ftp connection
     fname = filename of file to upload
@@ -271,7 +267,7 @@ def stor_changefiles(name, ftp, changefiles):
 
 def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
     """Upload, possibibly analyzing for changes zips.
-    
+
     old_ver: base version to make change files from
     version: version we're going to upload
     change: change message
@@ -316,8 +312,7 @@ def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
 
         print("\n\n" + "-" * 40 + " " + fullname)
 
-        # If we're given an old ver, try to make/upload changes zips
-        # and upload to server
+        # If we're given an old ver, try to make/upload changes zips and upload to server
 
         if old_ver:
             changefiles = make_change(name, old_ver, version, fast_newpath)
@@ -328,11 +323,10 @@ def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
                 return
 
         if not fast_newpath:
-            # Only do this stuff in a non-fast upload--since, after all
-            # we won't *have* build packages to upload. The webpage
-            # will still show the former version but the version.xml
-            # file will change--so users will be prompted for a patch-level
-            # upgade when they run program.
+            # Only do this stuff in a non-fast upload--since, after all we won't *have* build
+            # packages to upload. The webpage will still show the former version but the
+            # version.xml file will change--so users will be prompted for a patch-level upgade
+            # when they run program.
 
             dmg = name + "-" + version + ".dmg"
             exe = name + "-" + version + ".exe"
@@ -365,8 +359,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Upload packages.")
     parser.add_argument('--version', action='version', version=VERSION)
-    parser.add_argument("-m", "--message", metavar="message",
-                        required=True,
+    parser.add_argument("-m", "--message", metavar="message", required=True,
                         help="Changelog message")
     parser.add_argument("-b", "--basever", metavar="version",
                         help="Base version for patch upgrade")

@@ -17,12 +17,14 @@
 import sys
 import glob
 import zipfile
-from distutils.extension import Extension
 
+from setuptools import setup
 import os
 import tempfile
 import shutil
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from distutils.extension import Extension
+
 from xsocius.utils import NAME, VERSION, URL, SKIP_UI
 
 FAST = os.environ.get('FAST', False)
@@ -59,8 +61,7 @@ settings = dict(
     license="GPL",
     url=URL,
     description="Collaborative crossword solving GUI application.",
-    long_description=
-    "A GUI application for solving crosswords collaboratively.",
+    long_description="A GUI application for solving crosswords collaboratively.",
     classifiers=[
         'Environment :: MacOS X',
         'Environment :: Win32 (MS Windows)',
@@ -76,27 +77,29 @@ settings = dict(
     install_requires=['sleekxmpp']
 )
 
+
 # ----------------------------------- OSX APP ----------------------------------
 
-def BuildOSXApp():
-    PLIST = dict(CFBundleName=NAME,
-                 CFBundleIconFile=ICNS,
-                 CFBundleShortVersionString=VERSION,
-                 CFBundleGetInfoString="%s %s" % (NAME, VERSION),
-                 CFBundleExecutable=NAME,
-                 CFBundleIdentifier="com.joelburton.xsocius",
-                 CFBundleDevelopmentRegion="English",
-                 NSHumanReadableCopyright="Copyright 2013 by Joel Burton",
-                 CFBundleDocumentTypes=[dict(
-                     CFBundleTypeName='xname',
-                     CFBundleOSTypes=['xpuz'],
-                     CFBundleTypeExtensions=['puz'],
-                     CFBundleMIMETypes=['application/x-crossword'],
-                     CFBundleTypeRole='Viewer',
-                     LSTypeIsPackage=True
-                 )],
-                 LSRequiresCarbon=False,
-                 )
+
+def build_osx_app():
+    _plist = dict(CFBundleName=NAME,
+                  CFBundleIconFile=ICNS,
+                  CFBundleShortVersionString=VERSION,
+                  CFBundleGetInfoString="%s %s" % (NAME, VERSION),
+                  CFBundleExecutable=NAME,
+                  CFBundleIdentifier="com.joelburton.xsocius",
+                  CFBundleDevelopmentRegion="English",
+                  NSHumanReadableCopyright="Copyright 2013 by Joel Burton",
+                  CFBundleDocumentTypes=[dict(
+                      CFBundleTypeName='xname',
+                      CFBundleOSTypes=['xpuz'],
+                      CFBundleTypeExtensions=['puz'],
+                      CFBundleMIMETypes=['application/x-crossword'],
+                      CFBundleTypeRole='Viewer',
+                      LSTypeIsPackage=True
+                  )],
+                  LSRequiresCarbon=False,
+                  )
 
     settings.update(
         app=[APP, ],
@@ -107,7 +110,7 @@ def BuildOSXApp():
                            optimize=2,
                            compressed=True,
                            excludes="xsocius/help",
-                           plist=PLIST)},
+                           plist=_plist)},
         setup_requires=['py2app'],
     )
 
@@ -155,8 +158,7 @@ def BuildOSXApp():
                         'xsocius/tips' in path or
                         'xsocius/sounds' in path or
                         'xsocius/icons' in path or
-                    (path.startswith('wx/') and path.endswith('.dylib'))
-                ):
+                    (path.startswith('wx/') and path.endswith('.dylib'))):
                 print("* REMOVING %s" % path)
                 continue
 
@@ -177,19 +179,16 @@ def BuildOSXApp():
         _ = {'n': NAME, 'a': arch}
         os.mkdir('dist/%(n)s-%(a)s' % _)
         print("DITTO ===========")
-        os.system(
-            ("ditto --rsrc --arch %(a)s " +
-             " dist/%(n)s.app dist/%(n)s-%(a)s/%(n)s.app") % _)
+        os.system("ditto --rsrc --arch %(a)s  dist/%(n)s.app dist/%(n)s-%(a)s/%(n)s.app" % _)
         print("DITTO ===========")
         if not FAST:
-            os.system(
-                ("hdiutil create ./dist/%(n)s_%(a)s.dmg" +
-                 " -srcfolder dist/%(n)s-%(a)s") % _)
+            os.system("hdiutil create ./dist/%(n)s_%(a)s.dmg -srcfolder dist/%(n)s-%(a)s" % _)
 
 
 # ---------------------------------- LINUX EGG ---------------------------------
 
-def BuildLinux():
+
+def build_linux():
     settings.update(
         packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
         zip_safe=False,
@@ -202,26 +201,23 @@ def BuildLinux():
 
 # --------------------------------- WINDOWS EXE --------------------------------
 
-def BuildWindows():
+
+def build_windows():
     from cx_Freeze import setup, Executable
 
     settings.update(
-        options=
-        {"build_exe": {
-            'optimize': 2,
-            'include_files': [('xsocius\\tips', 'tips'),
-                              ('xsocius\\help', 'help'),
-                              ('xsocius\\icons', 'icons'),
-                              ('xsocius\\sounds', 'sounds')
-                              ],
-            'include_msvcr': True,
-        }
+        options={
+            "build_exe": {
+                'optimize': 2,
+                'include_files': [(r'xsocius\tips', 'tips'),
+                                  (r'xsocius\help', 'help'),
+                                  (r'xsocius\icons', 'icons'),
+                                  (r'xsocius\sounds', 'sounds')
+                                  ],
+                'include_msvcr': True,
+            }
         },
-        executables=[
-            Executable("xsocius\\run.py",
-                       targetName='%s.exe' % NAME,
-                       base='Win32GUI')
-        ]
+        executables=[Executable("xsocius\\run.py", targetName='%s.exe' % NAME, base='Win32GUI')]
     )
 
     setup(**settings)
@@ -258,15 +254,13 @@ Name: "{group}\%(NAME)s"; Filename: "{app}\%(NAME)s.exe"
 Name: "{group}\Uninstall %(NAME)s"; Filename: "{uninstallexe}"
 """ % {'NAME': NAME, 'URL': URL, 'VERSION': VERSION}
 
-    with open("build/exe.win32-3.3/installer.iss", "w") as f:
+    with open("build/exe.win32-3.4/installer.iss", "w") as f:
         f.write(iss)
 
 
 # --------------------------------- UNLOCKER -----------------------------------
 
-def BuildUnlocker():
-    from Cython.Distutils import build_ext
-
+def build_unlocker():
     print("\n\nIMPORTANT: "
           "This doesn't build all of this program, just the unlocker.\n\n")
     ext_modules = [Extension("unlocker", ["unlocker.pyx"])]
@@ -286,22 +280,22 @@ if __name__ == "__main__":
     cmd = sys.argv[1]
 
     if cmd == "py2app":
-        BuildOSXApp()
+        build_osx_app()
 
     elif cmd == "build_exe":
-        BuildWindows()
+        build_windows()
 
     elif cmd == "bdist_egg":
-        BuildLinux()
+        build_linux()
 
     elif cmd == "build_py":
-        BuildLinux()
+        build_linux()
 
     elif cmd == "sdist":
-        BuildLinux()
+        build_linux()
 
     elif cmd == "build_ext":
-        BuildUnlocker()
+        build_unlocker()
 
     else:
         # Keep this here so we can get help on setup.py and perhaps use any other commands (which

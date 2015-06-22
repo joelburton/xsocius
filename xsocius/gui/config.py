@@ -14,7 +14,7 @@ WEB_SOURCES = [
      'days': '1',
      'desc': 'Free puzzle from the New York Times archives.',
      'enabled': True,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:chicagoreader',
      'name': 'Chicago Reader',
@@ -22,7 +22,7 @@ WEB_SOURCES = [
      'days': '5',
      'desc': '',
      'enabled': True,
-     'icon': 'chicagoreader.png'},
+     'icon': 'chicagoreader.gif'},
 
     {'id': 'sys:chronicle',
      'name': 'Chronicle of Higher Education',
@@ -30,7 +30,7 @@ WEB_SOURCES = [
      'days': '5',
      'desc': 'Large weekly puzzle.',
      'enabled': True,
-     'icon': 'chronicle.png'},
+     'icon': 'chronicle.gif'},
 
     {'id': 'sys:wallstreet',
      'name': 'Wall Street Journal',
@@ -38,7 +38,7 @@ WEB_SOURCES = [
      'days': '5',
      'enabled': True,
      'desc': '',
-     'icon': 'wallstreet.png'},
+     'icon': 'wallstreet.gif'},
 
     {'id': 'sys:nytimesprem',
      'name': 'New York Times Premium',
@@ -46,7 +46,7 @@ WEB_SOURCES = [
      'days': '1234567',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': True,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem1',
      'name': 'New York Times Premium (Monday)',
@@ -54,7 +54,7 @@ WEB_SOURCES = [
      'days': '1',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem2',
      'name': 'New York Times Premium (Tuesday)',
@@ -62,7 +62,7 @@ WEB_SOURCES = [
      'days': '2',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem3',
      'name': 'New York Times Premium (Wednesday)',
@@ -70,7 +70,7 @@ WEB_SOURCES = [
      'days': '3',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem4',
      'name': 'New York Times Premium (Thursday)',
@@ -78,7 +78,7 @@ WEB_SOURCES = [
      'days': '4',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem5',
      'name': 'New York Times Premium (Friday)',
@@ -86,7 +86,7 @@ WEB_SOURCES = [
      'days': '5',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem6',
      'name': 'New York Times Premium (Saturday)',
@@ -94,7 +94,7 @@ WEB_SOURCES = [
      'days': '6',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:nytimesprem7',
      'name': 'New York Times Premium (Sunday)',
@@ -102,7 +102,7 @@ WEB_SOURCES = [
      'days': '7',
      'desc': 'Requires paid subscription; see help for details.',
      'enabled': False,
-     'icon': 'nytimes.png'},
+     'icon': 'nytimes.gif'},
 
     {'id': 'sys:jonesin',
      'name': "Jonesin' Crosswords",
@@ -342,7 +342,7 @@ class XsociusConfig(object):
             else:
                 # We're saving prefs, use choice made by user
                 _bool("enabled", o['enabled'])
-            _prop("icon", o['icon'] or 'generic.png')
+            _prop("icon", o['icon'] or 'generic.gif')
         self.config.Flush()
 
     # ---- Window Persistence
