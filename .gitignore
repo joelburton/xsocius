@@ -1,8 +1,14 @@
 .hg/
+.hg-old/
 .hgtags
+.hgtags-old
 .eggs/
 env/
 build/
 dist/
 upload/
 __pycache__
+*.egg-info
+
+/xsocius/help
+/help/_build

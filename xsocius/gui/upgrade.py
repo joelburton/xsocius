@@ -117,7 +117,7 @@ def newest_version_info():
 def prompt_update_version(window, version, change, date):
     """Given a version and update message, show box."""
 
-    if version is None or version < VERSION:
+    if version is None or version <= VERSION:
         # Can't get version info or is right version
         return
 
@@ -228,7 +228,7 @@ def apply_changes(tmpdir, libchanges, helpchanges, currver, newver):
 
     # find our site-packages.zip
     for path in sys.path:
-        if ( path.endswith("/python33.zip") or
+        if ( path.endswith("/python34.zip") or
              path.endswith(r"\library.zip") ):
             break
     else:

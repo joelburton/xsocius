@@ -1,4 +1,4 @@
-#!/opt/local/bin/python3.3
+#!/usr/bin/env python
 
 """Build Xsocius."""
 
@@ -74,10 +74,14 @@
 # afford to upload the whole clickable app. 
 
 import sys
+sys.path.append('.')
+
+import os
+os.environ['PYTHONPATH'] = '.'
+
 import glob
 import wx
 import re
-import os
 import os.path
 import shutil
 import zipfile
@@ -179,7 +183,7 @@ def build(name, fast=False, make_docs=True):
         # Windows: make docs, make exe, turn into installer
 
         if make_docs:
-            os.system("c:\\Python33\Scripts\\sphinx-build.exe -b singlehtml"
+            os.system("c:\\Python34\Scripts\\sphinx-build.exe -b singlehtml"
                     " -d help\\_build\\doctrees help xsocius\\help")
             decrap_help(name)
         try:
@@ -187,7 +191,7 @@ def build(name, fast=False, make_docs=True):
         except:
             pass
 
-        os.system("c:\\Python33\python -OO setup.py build_exe")
+        os.system("c:\\Python34\python -OO setup.py build_exe")
         os.system('"c:\\Program Files (x86)\\Inno Setup 5\\ISCC.exe"'
                 ' build\\exe.win32-3.3\\installer.iss')
         shutil.copyfile("build/exe.win32-3.3/Output/setup.exe", 
