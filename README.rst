@@ -55,7 +55,7 @@ Install virtualenv::
 
     c:\python34\scripts\pip install virtualenv
 
-Make virtualenv
+Make virtualenv::
 
     C:\python34\scripts\virtualenv env-win
     env-win\scripts\activate
