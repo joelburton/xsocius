@@ -51,7 +51,7 @@ class PenButton(buttons.GenBitmapToggleButton):
     """Pen/pencil button"""
 
     def __init__(self, parent):
-        img = wx.Image(get_icon("pencil-icon.png"))
+        img = wx.Image(get_icon("pencil-icon.gif"))
         bmp = img.ConvertToBitmap()
         buttons.GenBitmapToggleButton.__init__(self, parent, wx.ID_ANY, bmp)
         self.Bind(wx.EVT_BUTTON, self.OnToggle)

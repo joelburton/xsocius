@@ -673,7 +673,7 @@ class WebPuzzlePrefs(wx.Panel):
                'days': '',
                'desc': '',
                'enabled': True,
-               'icon': 'generic.png'}
+               'icon': 'generic.gif'}
         self.web_openers.append(new)
 
         self.lst.InsertImageStringItem(
