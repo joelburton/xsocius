@@ -1,0 +1,7 @@
+Beta testers are the most awesome people in the world.
+You can use your Gmail account (or other Jabber account) to play puzzles online.
+You can unlock encrypted puzzles using the "Unlock Puzzle" option in the Puzzle menu.
+You can switch between filling out in pen and pencil using the "Use Pencil/Pen" option in the Puzzle menu.
+Some puzzles require special characters or words in a square; if your puzzle does, you can enter these with "Enter Special Answer" in the Edit menu.
+You can use the timer to test your speed skills.
+If you want to prevent yoruself from using any help, you can turn on "Tournament Mode" options in the preferences.

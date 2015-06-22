@@ -1,0 +1,9 @@
+Leah is a great friend.
+You can use your Gmail account (or other Jabber IM account) to play puzzles online.
+You can unlock encrypted puzzles using the "Unlock Puzzle" option in the Puzzle menu.
+You can switch between filling out in pen and pencil using the "Use Pencil/Pen" option in the Puzzle menu.
+Some puzzles require special characters or words in a square; if your puzzle does, you can enter these with "Enter Special Answer" in the Edit menu.
+You can use the timer to test your speed skills.
+You can open web puzzles that are automatically updated.
+You can configure Moosewords to play NYT Premium puzzles.
+If you want to prevent yoruself from using any help, you can turn on "Tournament Mode" options in the preferences.

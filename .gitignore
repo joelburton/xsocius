@@ -1,0 +1,8 @@
+.hg/
+.hgtags
+.eggs/
+env/
+build/
+dist/
+upload/
+__pycache__

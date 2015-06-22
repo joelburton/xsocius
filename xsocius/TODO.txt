@@ -1,0 +1,22 @@
+bugs:
+
+- Opening help/bug report before puzzle fails
+  - only in built app - odd and strange hmm
+
+- Some puzzles don't decode properly
+
+cleanup:
+
+- rename "Sunday Morning"? http://sundaymorningpuzzle.com is available
+
+- make a more universal font scaling solution ?
+
+  ie, specify font size * 100, with macscale = 1/100, windows & unix ~ 1/120
+
+
+WONTFIX:
+
+- diagramless
+
+
+True
