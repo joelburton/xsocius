@@ -3,12 +3,13 @@
 import wx
 from xsocius.gui.menu import BrowserMenuBar
 
+
 class BrowserWindow(wx.Frame):
     """Internal browser window."""
 
     def __init__(self, url, title):
         wx.Frame.__init__(self, None, size=(950, 650), title=title)
-        
+
         self.SetMenuBar(BrowserMenuBar(self))
 
         webview = wx.html2.WebView.New(self)
@@ -21,19 +22,17 @@ class BrowserWindow(wx.Frame):
         self.Raise()
         wx.GetApp().SetTopWindow(self)
 
-
     def OnClose(self, event):
         """Close and destroy."""
 
         self.Destroy()
 
-
     def OnError(self, event):
         """Report web errors."""
 
-        dlg = wx.MessageDialog(None, 
-                "The web connection could not be completed.",
-                "Network or Site Error", wx.OK | wx.ICON_ERROR )
+        dlg = wx.MessageDialog(None,
+                               "The web connection could not be completed.",
+                               "Network or Site Error", wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
         dlg.Destroy()
         self.Destroy()
@@ -47,6 +46,7 @@ class BrowserWindow(wx.Frame):
 
 if __name__ == "__main__":
     import wx.html2
+
     app = wx.App()
     app.OnHelp = app.OnAbout = None
     BrowserWindow("http://foo.yahoo.com/asasa", "Yahoo")

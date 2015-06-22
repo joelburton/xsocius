@@ -40,4 +40,3 @@ class UndoRedoMixin:
             self.board.DrawNow()
         else:
             wx.MessageBox("You cannot use undo/redo when playing a shared game.")
-

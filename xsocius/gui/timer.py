@@ -12,7 +12,7 @@ class TimerButton(wx.ToggleButton):
         wx.ToggleButton.__init__(self, parent, wx.ID_ANY, "0:00")
         self.Bind(wx.EVT_TOGGLEBUTTON, self.OnToggle)
         self.puzzle_window = self.GetTopLevelParent()
-        #self.SetCanFocus(False) 
+        # self.SetCanFocus(False)
         self.Bind(wx.EVT_SET_FOCUS, self.IHaveFocus)
 
     def IHaveFocus(self, event):
@@ -34,7 +34,7 @@ class TimerButton(wx.ToggleButton):
 
         mins = secs // 60
         secs = secs % 60
-        
+
         self.SetLabel("%d:%0.2d" % (mins, secs))
 
 
@@ -55,7 +55,7 @@ class GameTimerMixin():
     def start_timer(self):
         """Start timer."""
 
-        self.wxtimer.Start(1000) # 1000ms=1 sec
+        self.wxtimer.Start(1000)  # 1000ms=1 sec
         self.puzzle.timer_running = True
         self.timer_button.SetValue(True)
         self.GetMenuBar().FindItemById(self.ID_TIMER_TOGGLE).SetText("Pause Timer\tCtrl-T")

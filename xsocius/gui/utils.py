@@ -9,14 +9,15 @@ import wx
 # so there's a roughly consistent size, we introduce a scale factor.
 
 if wx.Platform == '__WXMSW__':
-   SCALE = .80
+    SCALE = .80
 elif wx.Platform == '__WXGTK__':
-   SCALE = .75
+    SCALE = .75
 elif wx.Platform == '__WXMAC__':
-   SCALE = 1.0
+    SCALE = 1.0
 else:
-   # WTF are we?
-   SCALE = 1.0
+    # WTF are we?
+    SCALE = 1.0
+
 
 def font_scale(size):
     return size * SCALE
@@ -35,7 +36,7 @@ def makeHeading(window, txt):
     _ = wx.StaticText(window, wx.ID_ANY, txt)
     _.SetFont(wx.Font(font_scale(12), wx.FONTFAMILY_DEFAULT, wx.NORMAL, wx.BOLD))
     return _
-    
+
 
 def makeHint(window, txt):
     """Add light-grey static text."""
@@ -53,7 +54,7 @@ def _get_resource(sect, fname):
     """
 
     try:
-        return resource_filename("xsocius","%s/%s" % (sect, fname))
+        return resource_filename("xsocius", "%s/%s" % (sect, fname))
     except NotImplementedError as e:
         return os.path.abspath("%s/%s" % (sect, fname))
 

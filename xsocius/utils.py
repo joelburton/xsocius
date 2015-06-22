@@ -3,7 +3,7 @@
 # Configurable stuff
 
 NAME = "Xsocius"
-VERSION = "3.1.0"
+VERSION = "3.1.1"
 URL = "http://joelburton.users.sonic.net/%s" % NAME.lower()
 VERSION_URL = URL + "/version.xml"
 
@@ -15,9 +15,10 @@ VERSION_URL = URL + "/version.xml"
 # this feature turned on.
 SKIP_UI = False
 
-#---------------------------------------------------------------------
+# ---------------------------------------------------------------------
 
 import os.path
+
 
 def suggestSafeFilename(directory, fname):
     """Suggest a safe 'copy of' filename.
@@ -26,7 +27,7 @@ def suggestSafeFilename(directory, fname):
        that does not exist. It first adds "Copy of" in front of the name
        and, if that exists, increases a count at the end.
     """
-    
+
     while True:
         attempt = os.path.join(directory, fname)
 

@@ -18,22 +18,22 @@
 # Then users on OSX/Windows can use the inplace lightweight update.
 # Without this option, they cannot.
 
-import os
 import sys
 import ftplib
 import zipfile
 from zipfile import ZipFile
-import shutil
-import tempfile
 import argparse
 import datetime
 import getpass
 from xml.etree import ElementTree
 
+import os
+import tempfile
 from xsocius.utils import VERSION
 from make import ALL
 
-#--- find differences for change file
+
+# --- find differences for change file
 
 LIB = '/Contents/Resources/lib/python34.zip'
 PLIST = '/Contents/Info.plist'
@@ -45,7 +45,7 @@ def walk_to_path(top):
     lentop = len(top)
     files = []
     for path, dirnames, filenames in os.walk(top):
-        files.extend( [ os.path.join(path, f)[lentop:] for f in filenames ])
+        files.extend([os.path.join(path, f)[lentop:] for f in filenames])
     return files
 
 
@@ -57,7 +57,7 @@ def make_change(name, old_ver, version, new=None):
     # this is gone, it must be recreated by running make for that version.
 
     old = "upload/%s-%s.app" % (name, old_ver)
-        
+
     if not new:
         # Regular make
         #
@@ -73,7 +73,7 @@ def make_change(name, old_ver, version, new=None):
         # The help files are slightly different places here on disk--what
         # gets made out of this will be the same, though.
 
-        new = new % { 'name': name }
+        new = new % {'name': name}
         new_lib = "upload/%s-%s-sp.zip" % (name.lower(), version)
         old = old + "/Contents/Resources/help/"
         help_head = ""
@@ -85,7 +85,7 @@ def make_change(name, old_ver, version, new=None):
         print("** FATAL doesn't exist: %s" % old)
         sys.exit()
     if not os.path.exists(new):
-        print("** FATAL doesn't exist: %s" % new)  
+        print("** FATAL doesn't exist: %s" % new)
         sys.exit()
 
     ## Check for breaking differences and note any help differences
@@ -94,11 +94,11 @@ def make_change(name, old_ver, version, new=None):
     new_files = frozenset(walk_to_path(new))
 
     if old_files ^ new_files:
-        if new_files - old_files != { '.buildinfo' }:
+        if new_files - old_files != {'.buildinfo'}:
             print("Only in new %s" % new, new_files - old_files)
             print("old = ", old_files)
             return
-        #if old_files - new_files != {'/Contents/Resources/site.pyo'}:
+        # if old_files - new_files != {'/Contents/Resources/site.pyo'}:
         if old_files - new_files:
             print("Only in old %s" % old, old_files - new_files)
             print("new = ", new_files)
@@ -116,14 +116,14 @@ def make_change(name, old_ver, version, new=None):
     help_diff = []
 
     for fname in new_files:
-        if ( fname == PLIST
-                or fname.endswith('site.pyo')
-                or fname.endswith('python34.zip')
-                or fname.endswith('.so')
-                or fname.endswith('.dylib')
-                or fname.endswith('.buildinfo')
-                or fname.endswith('/Python')    # dunno why but sometimes Python interp changes?
-                    ):
+        if (fname == PLIST
+            or fname.endswith('site.pyo')
+            or fname.endswith('python34.zip')
+            or fname.endswith('.so')
+            or fname.endswith('.dylib')
+            or fname.endswith('.buildinfo')
+            or fname.endswith('/Python')  # dunno why but sometimes Python interp changes?
+            ):
             continue
 
         ofile = open(old + fname, 'rb')
@@ -154,16 +154,16 @@ def make_change(name, old_ver, version, new=None):
             path = new + help_head + fname
             help_zip.write(path, fname)
 
-    #---------- Library Changes
+    # ---------- Library Changes
 
     def _extract(path):
         # Extract xsocius-related .pyo files -- that's all we
         # can patch/care about
         lib = tempfile.mkdtemp()
         with ZipFile(path, 'r') as libzip:
-            libzip.extractall(lib, 
-                    [f for f in libzip.namelist() 
-                        if 'xsocius' in f and f.endswith('.pyo')])
+            libzip.extractall(lib,
+                              [f for f in libzip.namelist()
+                               if 'xsocius' in f and f.endswith('.pyo')])
         return lib + "/"
 
     # Get locations to unzipped xsocius pyo files for old & new
@@ -186,9 +186,8 @@ def make_change(name, old_ver, version, new=None):
     # Return path to helpzip and libzip
 
     return (help_path, lib_path)
-        
 
-#------------------------------------- UPLOADING STUFF
+# ------------------------------------- UPLOADING STUFF
 
 HTML = """
 <html>
@@ -208,7 +207,6 @@ HTML = """
   </body>
 </html>
 """
-
 
 
 def write_version(version, change):
@@ -244,7 +242,7 @@ def dot(x):
     "Feedback."""
 
     sys.stdout.write(".")
-    sys.stdout.flush()     # otherwise buffered until \n
+    sys.stdout.flush()  # otherwise buffered until \n
 
 
 def stor_file(name, ftp, fname, path=None):
@@ -260,8 +258,8 @@ def stor_file(name, ftp, fname, path=None):
         path = "upload/" + fname
     print("\n%s" % fname, end=' ')
     with open(path, 'rb') as f:
-       ftp.storbinary("STOR public_html/%s/%s" % (name, fname), f,
-               blocksize=65536, callback=dot)
+        ftp.storbinary("STOR public_html/%s/%s" % (name, fname), f,
+                       blocksize=65536, callback=dot)
 
 
 def stor_changefiles(name, ftp, changefiles):
@@ -285,7 +283,6 @@ def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
       a slightly different place to find help changes, this tell us where to
       look.
     """
-
 
     print()
     print("Version:", version)
@@ -313,7 +310,6 @@ def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
 
     write_version(version, change)
     print("Version file made at upload/version.xml")
-
 
     for fullname in buildlist:
         name = fullname.lower()
@@ -350,7 +346,7 @@ def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
                                 'egg': egg,
                                 'name': name,
                                 'dmg': dmg,
-                                'exe': exe })
+                                'exe': exe})
             print("\nMade HTML", end=' ')
 
             stor_file(name, ftp, dmg)
@@ -365,18 +361,17 @@ def upload(old_ver, version, change, buildlist=ALL, fast_newpath=None):
 
 
 if __name__ == "__main__":
-
     # Parse cmd line options
 
     parser = argparse.ArgumentParser(description="Upload packages.")
     parser.add_argument('--version', action='version', version=VERSION)
-    parser.add_argument("-m", "--message", metavar="message", 
-        required=True,
-        help="Changelog message")
-    parser.add_argument("-b", "--basever", metavar="version", 
-        help="Base version for patch upgrade")
+    parser.add_argument("-m", "--message", metavar="message",
+                        required=True,
+                        help="Changelog message")
+    parser.add_argument("-b", "--basever", metavar="version",
+                        help="Base version for patch upgrade")
     parser.add_argument("builders", metavar="builder", nargs="*",
-        help="Builders to use (defaults to all)", default=ALL)
+                        help="Builders to use (defaults to all)", default=ALL)
     args = parser.parse_args()
 
     upload(args.basever, VERSION, args.message, args.builders)

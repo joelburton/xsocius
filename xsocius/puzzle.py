@@ -4,11 +4,12 @@ Logic related to the in-memory representation of crossword puzzle, clues,
 and cells. GUI stuff is not located here.
 """
 
-import os.path
 import logging
 
+import os.path
 from xsocius import acrosslite
 from xsocius.undo import UndoQueue
+
 
 # There is a c-based unlocker but it may not work for all systems
 # (and I have no means to compile it for Windows). Fall back on the 
@@ -16,6 +17,7 @@ from xsocius.undo import UndoQueue
 
 try:
     from xsocius.unlocker import gui_unlock
+
     FAST_UNLOCK = True
 except ImportError:
     FAST_UNLOCK = False
@@ -27,30 +29,30 @@ class DiagramlessPuzzleFormatError(Exception):
 
 class Cell(object):
     """Cell."""
-    
+
     x = None
     y = None
     xy = (None, None)
-    across = None     # across clue starting here, else None
-    down = None       # down clue starting here, else None
+    across = None  # across clue starting here, else None
+    down = None  # down clue starting here, else None
     in_across = None  # across clue this is part of, else None
-    in_down = None    # down clue this is part of, else None
-    black = False     # True is space is nonplayable
-    answer = None     # Correct answer
-    response = None   # Current user answer on board.
-    circled = False   # Cell is circled
-    checked = False   # User checked correctness of cell
+    in_down = None  # down clue this is part of, else None
+    black = False  # True is space is nonplayable
+    answer = None  # Correct answer
+    response = None  # Current user answer on board.
+    circled = False  # Cell is circled
+    checked = False  # User checked correctness of cell
     revealed = False  # User cheated and revealed cell
-    across_cells = [] # List of across cells in this word
-    down_cells = []   # List of down cells in this word
-    rebus_answer = None      # Full text of solution
-    rebus_response = None    # Rebus response
-    highlight = False # Used to flash cells changed by friend
-    flash_correct = None    # Flash when correct for a second
-    pencil = False    # Answer in pencil (defaults to pen)
-    
+    across_cells = []  # List of across cells in this word
+    down_cells = []  # List of down cells in this word
+    rebus_answer = None  # Full text of solution
+    rebus_response = None  # Rebus response
+    highlight = False  # Used to flash cells changed by friend
+    flash_correct = None  # Flash when correct for a second
+    pencil = False  # Answer in pencil (defaults to pen)
+
     def __init__(self, x, y, across=None, down=None, response=None,
-            checked=None, answer=None, revealed=None):
+                 checked=None, answer=None, revealed=None):
         self.x = x
         self.y = y
         self.xy = (x, y)
@@ -71,20 +73,17 @@ class Cell(object):
             self.answer = answer
         if revealed is not None:
             self.revealed = revealed
-        
 
     def __repr__(self):
-        #return "%s%s%s" % (self.x, self.y, self.response )
-        return ( "<Cell x={c.x} y={c.y} across={c.across} down={c.down}"
-               " in_across={c.in_across} in_down={c.in_down}" 
-               " black={c.black} answer={c.answer} response={c.response}"
-               " circled={c.circled} checked={c.checked}"
-               " revealed={c.revealed}>" ).format(c=self)
-
+        # return "%s%s%s" % (self.x, self.y, self.response )
+        return ("<Cell x={c.x} y={c.y} across={c.across} down={c.down}"
+                " in_across={c.in_across} in_down={c.in_down}"
+                " black={c.black} answer={c.answer} response={c.response}"
+                " circled={c.circled} checked={c.checked}"
+                " revealed={c.revealed}>").format(c=self)
 
     def __bool__(self):
         return bool(self.response)
-
 
     def _to_state(self):
         """Return tuple of state items.
@@ -95,7 +94,6 @@ class Cell(object):
 
         return (self.response, self.checked, self.revealed, self.rebus_answer)
 
-
     def _from_state(self, state):
         """Updates cell from state item.
 
@@ -105,7 +103,6 @@ class Cell(object):
 
         self.response, self.checked, self.revealed, self.rebus_answer = state
 
-
     def reset(self):
         """Start square over."""
 
@@ -113,37 +110,34 @@ class Cell(object):
         self.checked = False
         self.revealed = False
 
-
     def is_correct(self):
         """Is cell corect."""
 
-        return (self.answer == self.response 
+        return (self.answer == self.response
                 and self.rebus_answer == self.rebus_response)
 
 
-        
 class Clue(object):
     """Puzzle clue."""
 
     def __init__(self, num=None):
         if num:
             self.num = num
-    
-    num = 0                     # Clue number
-    across = None               # Across clue for this #, if any
-    down = None                 # Down clue for this #, if any
-    across_idx = None           # Index # of this clue in across list
-    down_idx = None             # Index $# of this clue in down list
-    cell = Cell(None, None)     # Cell for this clue
-    across_filled = False       # True if filled-out-across
-    down_filled = False         # True if filled-out-down
+
+    num = 0  # Clue number
+    across = None  # Across clue for this #, if any
+    down = None  # Down clue for this #, if any
+    across_idx = None  # Index # of this clue in across list
+    down_idx = None  # Index $# of this clue in down list
+    cell = Cell(None, None)  # Cell for this clue
+    across_filled = False  # True if filled-out-across
+    down_filled = False  # True if filled-out-down
 
     def __repr__(self):
         return "<Clue num=%s across='%s' down='%s' across_idx=%s down_idx=%s" \
                " cell=%s>" % (
-                        self.num, self.across, self.down, self.across_idx, 
-                        self.down_idx, self.cell.xy)
-    
+                   self.num, self.across, self.down, self.across_idx,
+                   self.down_idx, self.cell.xy)
 
     def update_filled(self, direction):
         """True if grid for clue filled in (regardless if correct.)
@@ -155,16 +149,15 @@ class Clue(object):
 
         if direction == "across":
             out = self.across_filled = all(
-                    [ cell.response for cell in self.cell.across_cells ])
-         
+                [cell.response for cell in self.cell.across_cells])
+
         else:
             out = self.down_filled = all(
-                    [ cell.response for cell in self.cell.down_cells ])
+                [cell.response for cell in self.cell.down_cells])
 
         return out
-         
-    
-    
+
+
 class Puzzle(object):
     """Crossword puzzle.
 
@@ -174,17 +167,17 @@ class Puzzle(object):
 
     Does not contain GUI-specific code.
     """
-    
+
     grid = []
     clues = [None]  # First clue is null clue, so clue #1 = clues[1]
-    
+
     height = 0
     width = 0
     title = ""
     author = ""
     copyright = ""
     note = ""
-    
+
     curr_cell = None
     curr_dir = "across"
 
@@ -196,25 +189,23 @@ class Puzzle(object):
     filename_no_ext = None
 
     dirty = False  # unsaved changes
-    xmpp = None    # not connected to chat now
+    xmpp = None  # not connected to chat now
     timer_start = 0
     timer_start_paused = True
 
     grey_filled_clues = False
-    
 
     def load(self, path):
         """Load file and setup puzzle."""
-        
+
         self.path = path = os.path.abspath(path)
         self.dirname, self.filename = os.path.split(path)
         self.filename_no_ext = os.path.splitext(self.filename)[0]
-        
+
         pfile = acrosslite.read(path)
         if pfile.puzzletype == acrosslite.PuzzleType.Diagramless:
             raise DiagramlessPuzzleFormatError("Can't use diagramless puzzles")
         self._setup(pfile)
-        
 
     def _setup(self, pfile):
         """Examine board and number clues."""
@@ -235,7 +226,7 @@ class Puzzle(object):
         # etc) from a flat-list to our x,y matrix format.
 
         def _to_matrix(v, h, w):
-            return { (x,y): v[x+(y*w)] for y in range(h) for x in range(w) }
+            return {(x, y): v[x + (y * w)] for y in range(h) for x in range(w)}
 
         answers = _to_matrix(pfile.solution, height, width)
         responses = _to_matrix(pfile.fill, height, width)
@@ -254,48 +245,47 @@ class Puzzle(object):
         else:
             rebus = [0 for i in range(height * width)]
 
-
         rebus = _to_matrix(rebus, height, width)
-        
-        #--- Process grid
+
+        # --- Process grid
 
         def _translate_response(r):
             if r == "-":
-                return ""      
+                return ""
             return r
-        
+
         for y in range(height):
             for x in range(width):
                 cell = self.grid[x][y]
-                if responses[x,y] == ".":
+                if responses[x, y] == ".":
                     cell.black = True
                     continue
-                cell.answer = answers[x,y]
-                cell.response = _translate_response(responses[x,y])
+                cell.answer = answers[x, y]
+                cell.response = _translate_response(responses[x, y])
 
                 # Set states from binary coded markup in file
-                _markup = markup[x,y]
-                cell.checked =  bool(
-                        _markup & acrosslite.GridMarkup.Incorrect or 
-                        _markup & acrosslite.GridMarkup.PreviouslyIncorrect)
+                _markup = markup[x, y]
+                cell.checked = bool(
+                    _markup & acrosslite.GridMarkup.Incorrect or
+                    _markup & acrosslite.GridMarkup.PreviouslyIncorrect)
                 cell.revealed = bool(_markup & acrosslite.GridMarkup.Revealed)
                 cell.circled = bool(
-                        markup[x,y] & acrosslite.GridMarkup.Circled)
+                    markup[x, y] & acrosslite.GridMarkup.Circled)
 
                 # Set rebus stuff
-                if rebus[x,y]:
-                    cell.rebus_answer = rebus_map[rebus[x,y]-1]
-                    idx = y*width + x
-                    cell.rebus_response = rebus_fill.get(y*width + x)
+                if rebus[x, y]:
+                    cell.rebus_answer = rebus_map[rebus[x, y] - 1]
+                    idx = y * width + x
+                    cell.rebus_response = rebus_fill.get(y * width + x)
 
-                
 
-        #--- Process clues
+
+        # --- Process clues
 
         # First, make array to hold clues. 
-        nclues = max( 
-                [ c['num'] for c in raw_clues.down + raw_clues.across  ] )
-        self.clues = [None] + [ Clue() for i in range(nclues) ]
+        nclues = max(
+            [c['num'] for c in raw_clues.down + raw_clues.across])
+        self.clues = [None] + [Clue() for i in range(nclues)]
 
         # Iterate over across clues
         #
@@ -309,7 +299,7 @@ class Puzzle(object):
             clue.across = aclue['clue']
             clue.num = num
             clue.across_idx = idx
-            
+
             # Get cell (convert AL flat format to our matrix) and update cell
             _pos = aclue['cell']
             y = _pos // width
@@ -319,11 +309,11 @@ class Puzzle(object):
             cell.across = clue
 
             # Update all cells in this word
-            word = [ self.grid[ox][y] for ox in range(x, x+aclue['len']) ]
+            word = [self.grid[ox][y] for ox in range(x, x + aclue['len'])]
             for cell in word:
                 cell.in_across = clue
                 cell.across_cells = word
-        
+
         # Do same thing for down clues
 
         for idx, dclue in enumerate(raw_clues.down):
@@ -333,7 +323,7 @@ class Puzzle(object):
             clue.down = dclue['clue']
             clue.num = num
             clue.down_idx = idx
-            
+
             _pos = dclue['cell']
             y = _pos // width
             x = _pos % width
@@ -341,7 +331,7 @@ class Puzzle(object):
             clue.cell = cell
             cell.down = clue
 
-            word = [ self.grid[x][oy] for oy in range(y, y+dclue['len']) ]
+            word = [self.grid[x][oy] for oy in range(y, y + dclue['len'])]
             for cell in word:
                 cell.in_down = clue
                 cell.down_cells = word
@@ -351,7 +341,6 @@ class Puzzle(object):
         if pfile.has_timer():
             self.timer_start = self.pfile.timer().elapsed_sec
             self.start_paused = self.pfile.timer().paused
-
 
     def initPuzzleCursor(self):
         """Set initial puzzle cursor."""
@@ -386,9 +375,8 @@ class Puzzle(object):
 
         self.clues_completed_queue = []
 
-
-    def setResponse(self, cell, response, rebus=None, noecho=False, 
-            pencil=False):
+    def setResponse(self, cell, response, rebus=None, noecho=False,
+                    pencil=False):
         """Set response."""
 
         # Use only when setting a single cell at a time, since this
@@ -409,7 +397,6 @@ class Puzzle(object):
 
         self.add_undo()
 
-
     def break_encryption(self):
         """Break encryption of puzzle."""
 
@@ -417,13 +404,13 @@ class Puzzle(object):
         # Now done with Cython so it's even faster :)
 
         unscrambled, key = gui_unlock(
-                self.width, 
-                self.height, 
-                pfile.solution.encode(), 
-                pfile.scrambled_cksum)
+            self.width,
+            self.height,
+            pfile.solution.encode(),
+            pfile.scrambled_cksum)
         print(unscrambled, key)
         if not unscrambled:
-             return False
+            return False
 
         # Reload puzzle
         pfile.solution = unscrambled.decode()
@@ -432,7 +419,6 @@ class Puzzle(object):
         self.updateAnswers()
         return key
 
-
     def updateAnswers(self):
         """Update our answers from underlying puzzle object.
 
@@ -440,15 +426,15 @@ class Puzzle(object):
         """
 
         def _to_matrix(v, h, w):
-            return { (x,y): v[x+(y*w)] 
-                    for y in range(h) for x in range(w) }
+            return {(x, y): v[x + (y * w)]
+                    for y in range(h) for x in range(w)}
 
         answers = _to_matrix(self.pfile.solution, self.height, self.width)
 
         for y in range(self.height):
             for x in range(self.width):
-                if not answers[x,y] == ".":
-                    self.grid[x][y].answer = answers[x,y]
+                if not answers[x, y] == ".":
+                    self.grid[x][y].answer = answers[x, y]
 
         # We can't undo/redo after locking/unlocking, so reset the undo system.
 
@@ -456,7 +442,7 @@ class Puzzle(object):
         self.undo = UndoQueue(state)
         self.revert_state = state
 
-    #--- Undo stuff
+    # --- Undo stuff
 
 
     def revert_puzzle(self):
@@ -468,7 +454,6 @@ class Puzzle(object):
         self._undoPackageToState(self.revert_state)
         self.add_undo()
 
-
     def save_state(self):
         """Save state of puzzle."""
 
@@ -476,7 +461,6 @@ class Puzzle(object):
         # if requested.
 
         self.revert_state = self._stateToUndoPackage()
-
 
     def _stateToUndoPackage(self):
         """Package together a simple state object for undo/redo."""
@@ -488,23 +472,21 @@ class Puzzle(object):
         # the cells in the grid
 
         package = {
-            'grid': [[ c._to_state() for c in y] for y in self.grid ],
+            'grid': [[c._to_state() for c in y] for y in self.grid],
             'curr_x': self.curr_cell.x,
             'curr_y': self.curr_cell.y,
-            'curr_dir': self.curr_dir }
+            'curr_dir': self.curr_dir}
 
         return package
-
 
     def _undoPackageToState(self, package):
         """Change state to reflect package from undo/redo."""
 
         for x in range(self.width):
             for y in range(self.height):
-                self.grid[x][y]._from_state( package['grid'][x][y] )
+                self.grid[x][y]._from_state(package['grid'][x][y])
         self.curr_cell = self.grid[package['curr_x']][package['curr_y']]
         self.curr_dir = package['curr_dir']
-
 
     def doUndo(self):
         """Restore undo package -> current state."""
@@ -512,14 +494,12 @@ class Puzzle(object):
         package = self.undo.undo()
         self._undoPackageToState(package)
 
-
     def doRedo(self):
         """Restore redo package -> curent state."""
 
         package = self.undo.redo()
         self._undoPackageToState(package)
 
-    
     def add_undo(self):
         """Add undo state.
         
@@ -534,7 +514,6 @@ class Puzzle(object):
         self.dirty = True
 
         self.on_any_change()
-
 
     def check_clue_fill_change(self, force=True):
         """Check for changes in clue fills.
@@ -558,14 +537,13 @@ class Puzzle(object):
                 filled = c.update_filled("across")
                 if filled != old or force:
                     self.clues_completed_queue.append((
-                            "across", c.across_idx, filled))
+                        "across", c.across_idx, filled))
             if c.down:
                 old = c.down_filled
                 filled = c.update_filled("down")
                 if filled != old or force:
                     self.clues_completed_queue.append((
-                            "down", c.down_idx, filled))
-
+                        "down", c.down_idx, filled))
 
     def on_any_change(self, skip_check_finished=False):
         """Stuff to do on any update.
@@ -593,8 +571,7 @@ class Puzzle(object):
         if hasattr(self, 'gui'):
             self.gui.on_any_change()
 
-
-    #--- Moving cursor
+    # --- Moving cursor
 
 
     def move(self, cell, dx, dy, stay_in_word=False, skip_filled=False):
@@ -603,10 +580,10 @@ class Puzzle(object):
         Skip over black squares. If edge of puzzle is reached, return
         original Cell.
         """
-        
+
         x = cell.x
         y = cell.y
-        
+
         x = x + dx
         while dx and x >= 0 and x < self.width:
             black = self.grid[x][y].black
@@ -618,7 +595,7 @@ class Puzzle(object):
             x = x + dx
         else:
             x = cell.x  # Can't move; only black beyond us
-                
+
         y = y + dy
         while dy and y >= 0 and y < self.height:
             black = self.grid[x][y].black
@@ -630,9 +607,8 @@ class Puzzle(object):
             y = y + dy
         else:
             y = cell.y  # Can't move; only black beyond us
-                
+
         return self.grid[x][y]
-        
 
     def next_word(self, cell, dx, dy):
         """Skip to next word in same direction."""
@@ -680,7 +656,6 @@ class Puzzle(object):
 
         return self.grid[x][y]
 
-
     def switch_dir(self):
         """Switch our direction on puzzle."""
 
@@ -688,9 +663,8 @@ class Puzzle(object):
             self.curr_dir = "down"
         else:
             self.curr_dir = "across"
-            
 
-    #--- Current puzzle info
+    # --- Current puzzle info
 
 
     def curr_clue(self):
@@ -701,35 +675,31 @@ class Puzzle(object):
         else:
             return self.curr_cell.in_down.down
 
-
     def curr_word(self):
         """Return list of cells in current word."""
-        
+
         if self.curr_dir == "across":
             return self.curr_cell.across_cells
         else:
             return self.curr_cell.down_cells
-        
 
     def curr_word_text(self):
         """Return current word."""
 
-        return "".join([ let.response or "?" for let in self.curr_word() ])
-
+        return "".join([let.response or "?" for let in self.curr_word()])
 
     def curr_word_complete(self):
         """Is current word complete?"""
 
         if self.curr_dir == "across":
-            return all( [ bool(cell) for cell in self.curr_cell.across_cells ])
+            return all([bool(cell) for cell in self.curr_cell.across_cells])
         else:
-            return all( [ bool(cell) for cell in self.curr_cell.down_cells ])
-
+            return all([bool(cell) for cell in self.curr_cell.down_cells])
 
     def is_puzzle_correct(self):
         """Return True if entire puzzle is filled out and correct."""
-        
-        if self.pfile.is_solution_locked():        
+
+        if self.pfile.is_solution_locked():
             # If puzzle is locked, we can use the underlying acrosslite lib
             # to check if it is correct--but we first have to "push" our
             # changes to the grid responses down into the format that the
@@ -754,8 +724,7 @@ class Puzzle(object):
                         return False
             return True
 
-
-    #---- Clear and Paste
+    # ---- Clear and Paste
 
 
     def clear_curr_word(self, noecho=False):
@@ -768,8 +737,7 @@ class Puzzle(object):
         self.add_undo()
 
         if self.xmpp is not None and not noecho:
-            self.xmpp.send_clear( [ c.xy for c in self.curr_word() ] )  
-
+            self.xmpp.send_clear([c.xy for c in self.curr_word()])
 
     def fill_curr_word(self, word):
         """Fill in current word.
@@ -780,7 +748,7 @@ class Puzzle(object):
         curr_word = self.curr_word()
         for i, letter in enumerate(word):
 
-            if i == len(curr_word): 
+            if i == len(curr_word):
                 # Reached end of word on board, stop trying to paste in rest
                 break
 
@@ -790,8 +758,7 @@ class Puzzle(object):
 
         self.add_undo()
 
-
-    #---- Check letter/words/puzzle
+    # ---- Check letter/words/puzzle
 
 
     def _check_letter(self, cell):
@@ -799,13 +766,12 @@ class Puzzle(object):
 
         # Use internally; doesn't send updates via XMPP or add undopoint.
 
-        if not cell.response: 
+        if not cell.response:
             return
 
         if not cell.is_correct():
             cell.checked = True
             return True
-
 
     def is_curr_word_correct(self):
         """Is current word complete and correct?
@@ -819,9 +785,8 @@ class Puzzle(object):
         for cell in self.curr_word():
             if not cell.is_correct():
                 return False
-   
-        return True
 
+        return True
 
     def check_letter(self):
         """Check letter under cursor."""
@@ -832,7 +797,6 @@ class Puzzle(object):
                 self.xmpp.send_check([self.curr_cell.xy])
             return True
 
-
     def check_word(self):
         """Check word under cursor."""
 
@@ -842,10 +806,9 @@ class Puzzle(object):
                 changed = True
         if changed:
             if self.xmpp is not None:
-                self.xmpp.send_check([ c.xy for c in self.curr_word() ])
+                self.xmpp.send_check([c.xy for c in self.curr_word()])
             self.add_undo()
             return True
-
 
     def check_puzzle(self, noecho=False):
         """Check entire puzzle.
@@ -863,12 +826,11 @@ class Puzzle(object):
             if self.xmpp is not None and not noecho:
                 # Send our friend a request to do same, but only if we were
                 # the person who actually requested the check.
-                self.xmpp.send_check([("*","*")])
+                self.xmpp.send_check([("*", "*")])
             self.add_undo()
             return True
 
-
-    #----- Reveal letter/words/puzzle
+    # ----- Reveal letter/words/puzzle
 
 
     def _reveal_letter(self, cell):
@@ -878,11 +840,10 @@ class Puzzle(object):
 
         if cell.response != cell.answer:
             cell.response = cell.answer
-            cell.rebus_response = cell.rebus_answer 
+            cell.rebus_response = cell.rebus_answer
             cell.checked = True
             cell.revealed = True
             return True
-
 
     def reveal_letter(self):
         """Reveal letter under cursor."""
@@ -893,7 +854,6 @@ class Puzzle(object):
                 self.xmpp.send_reveal([self.curr_cell.xy])
             return True
 
-
     def reveal_word(self):
         """Reveal word under cursor."""
 
@@ -903,10 +863,9 @@ class Puzzle(object):
                 changed = True
         if changed:
             if self.xmpp is not None:
-                self.xmpp.send_reveal([ c.xy for c in self.curr_word() ])
+                self.xmpp.send_reveal([c.xy for c in self.curr_word()])
             self.add_undo()
             return True
-
 
     def reveal_puzzle(self, noecho=False):
         """Reveal entire puzzle."""
@@ -918,10 +877,9 @@ class Puzzle(object):
                     changed = True
         if changed:
             if self.xmpp is not None and not noecho:
-                self.xmpp.send_reveal([("*","*")])
+                self.xmpp.send_reveal([("*", "*")])
             self.add_undo()
             return True
-
 
     def reveal_incorrect(self):
         """Reveal entire puzzle, but only for incorrect letters"""
@@ -935,8 +893,7 @@ class Puzzle(object):
             self.add_undo()
             return True
 
-
-    #---- Save/Save As
+    # ---- Save/Save As
 
     def update_pfile(self):
         """Update underlying pfile for save."""
@@ -979,8 +936,7 @@ class Puzzle(object):
 
         # Save timer
         self.pfile.extensions[acrosslite.Extensions.Timer] = "%s,%s" % (
-                self.timer_time, int(not self.timer_running))
-
+            self.timer_time, int(not self.timer_running))
 
     def save_puzzle(self, path=None):
         """Save puzzle."""
@@ -999,8 +955,6 @@ class Puzzle(object):
         logging.info("Puzzle saved: %s", path)
         self.dirty = False
 
-         
-            
 
 if __name__ == "__main__":
     p = Puzzle()

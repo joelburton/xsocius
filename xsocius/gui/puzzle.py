@@ -1,14 +1,11 @@
 """Puzzle window."""
 
 import logging
-import random
 
+import random
 import wx
 import wx.lib.buttons as buttons
 from wx.lib.splitter import MultiSplitterWindow
-import wx.lib.agw.pybusyinfo as PBI
-
-
 from xsocius.utils import suggestSafeFilename
 from xsocius.puzzle import FAST_UNLOCK
 from xsocius.gui.window import BaseWindow
@@ -24,6 +21,7 @@ from xsocius.gui.menu import PuzzleMenuBar
 from xsocius.gui.printing import PrintMixin
 from xsocius.gui.utils import get_icon, font_scale
 from xsocius.gui.note import NoteWindow
+
 
 
 
@@ -72,7 +70,7 @@ class PenButton(buttons.GenBitmapToggleButton):
         logging.debug("on pen/pencil toggle")
         self.puzw.pencil = not self.puzw.pencil
         tool = "Pen" if self.puzw.pencil else "Pencil"
-        self.puzw.GetMenuBar()\
+        self.puzw.GetMenuBar() \
             .FindItemById(self.puzw.ID_TOGGLE_PEN).SetText("Use %s\tCtrl-E" % tool)
 
 
@@ -83,7 +81,7 @@ class PuzzleWindow(BaseWindow,
                    ShareWindowMixin,
                    PrintMixin):
     """A window with a puzzle in it."""
-    
+
     no_autowin = False
     pencil = False
     fullscreen = False
@@ -98,7 +96,7 @@ class PuzzleWindow(BaseWindow,
         PrintMixin.__init__(self)
 
         self.SetMenuBar(PuzzleMenuBar(self))
-        #self.ShowFullScreen(True)
+        # self.ShowFullScreen(True)
 
         self.splitter = MultiSplitterWindow(self, style=wx.SP_LIVE_UPDATE)
         self.share_panel = SharingPanel(self.splitter)
@@ -125,7 +123,7 @@ class PuzzleWindow(BaseWindow,
         else:
             self.clues_panel.Hide()
         self.SetMinSize((minw, minh))
-        
+
         # Events for general window stuff
 
         self.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGING, self.OnChangingSplitter)
@@ -163,13 +161,13 @@ class PuzzleWindow(BaseWindow,
 
         self.puzzle_panel.puzzle = self.puzzle = puzzle
         puzzle.gui = self
-        
+
         # Current clue text appears at top of puzzle in bold
         # (actual text is dynamically filled in)
 
-        self.cluetext = wx.StaticText(self.puzzle_panel) 
+        self.cluetext = wx.StaticText(self.puzzle_panel)
         self.cluetext.SetForegroundColour("#444444")
-    
+
         # Puzzle title appear below grid
 
         if puzzle.author:
@@ -199,7 +197,7 @@ class PuzzleWindow(BaseWindow,
         # Add timer
 
         self.timer_button = TimerButton(self.puzzle_panel)
-        
+
         # Add board, and labels to main panel
 
         self.board = Board(self.puzzle_panel)
@@ -302,7 +300,7 @@ class PuzzleWindow(BaseWindow,
                            wx.NORMAL,
                            wx.BOLD))
 
-        hc.Wrap(self.puzzle_panel.GetSize()[0]-10)
+        hc.Wrap(self.puzzle_panel.GetSize()[0] - 10)
 
     def end_hover_clue(self, event):
         """Hide clue when you leave hover over clue text above grid."""
@@ -316,15 +314,15 @@ class PuzzleWindow(BaseWindow,
     def setupScrambled(self):
         """If puzzle is scrambled, hide check/reveal links."""
 
-        for i in [ self.ID_CHECK_LETTER,
-                   self.ID_CHECK_WORD,
-                   self.ID_CHECK_PUZZLE,
-                   self.ID_REVEAL_LETTER,
-                   self.ID_REVEAL_WORD,
-                   self.ID_REVEAL_PUZZLE,
-                   self.ID_REVEAL_WRONG,
-                   self.ID_LOCK,
-                   ]:
+        for i in [self.ID_CHECK_LETTER,
+                  self.ID_CHECK_WORD,
+                  self.ID_CHECK_PUZZLE,
+                  self.ID_REVEAL_LETTER,
+                  self.ID_REVEAL_WORD,
+                  self.ID_REVEAL_PUZZLE,
+                  self.ID_REVEAL_WRONG,
+                  self.ID_LOCK,
+                  ]:
             self.GetMenuBar().FindItemById(i).Enable(False)
 
         dlg = wx.MessageDialog(
@@ -333,7 +331,7 @@ class PuzzleWindow(BaseWindow,
             "for checking or revealing correct letters.\n\n"
             "You can unlock the solution with the 'Unlock Puzzle' option in the Puzzle menu.",
             "Scrambled Puzzle",
-            style=wx.OK|wx.ICON_INFORMATION)
+            style=wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -351,12 +349,12 @@ class PuzzleWindow(BaseWindow,
         self.need_show_note = False
         if self.puzzle.note:
             logging.debug("Has note: =%s=", self.puzzle.note)
-            self.GetMenuBar().Enable(self.ID_SHOW_NOTE, True) # test
+            self.GetMenuBar().Enable(self.ID_SHOW_NOTE, True)  # test
             config = wx.GetApp().config
             if config.note_on_open:
                 self.need_show_note = True
         else:
-            self.GetMenuBar().Enable(self.ID_SHOW_NOTE, False) # test
+            self.GetMenuBar().Enable(self.ID_SHOW_NOTE, False)  # test
 
         self.puzzle.initPuzzleCursor()
 
@@ -384,14 +382,14 @@ class PuzzleWindow(BaseWindow,
         config = wx.GetApp().config
         find = self.GetMenuBar().FindItemById
 
-        for i in [ self.ID_CHECK_LETTER,
-                   self.ID_CHECK_WORD,
-                   self.ID_CHECK_PUZZLE,
-                   self.ID_REVEAL_LETTER,
-                   self.ID_REVEAL_WORD,
-                   self.ID_REVEAL_PUZZLE,
-                   self.ID_REVEAL_WRONG,
-                   ]:
+        for i in [self.ID_CHECK_LETTER,
+                  self.ID_CHECK_WORD,
+                  self.ID_CHECK_PUZZLE,
+                  self.ID_REVEAL_LETTER,
+                  self.ID_REVEAL_WORD,
+                  self.ID_REVEAL_PUZZLE,
+                  self.ID_REVEAL_WRONG,
+                  ]:
             find(i).Enable(not config.no_cheats)
 
         find(self.ID_ONEACROSS).Enable(not config.no_oneacross)
@@ -451,14 +449,13 @@ class PuzzleWindow(BaseWindow,
         else:
             self.puzzle.check_clue_fill_change(force=True)
 
-
-    #---------------- MENU EVENTS
+    # ---------------- MENU EVENTS
     #
     # Menu items specific to a puzzle are defined here; ones that are not
     # (eg open puzzle, quit, etc) are in gui/app.py.
 
 
-    #--------- File Menu
+    # --------- File Menu
 
     def DoClose(self):
         """Check if we're dirty and, if so, prompt to save."""
@@ -487,10 +484,9 @@ class PuzzleWindow(BaseWindow,
         self.Destroy()
         wx.GetApp().windows.remove(self)
 
-
     def OnClose(self, event):
         """Close puzzle."""
-        
+
         logging.debug("On close")
         self.DoClose()
 
@@ -499,7 +495,6 @@ class PuzzleWindow(BaseWindow,
             wx.GetApp().OpenDummy()
 
         logging.debug("On close done")
-            
 
     def _save_puzzle(self, path=None):
         """Save puzzle, showing errors.
@@ -510,49 +505,44 @@ class PuzzleWindow(BaseWindow,
         try:
             self.puzzle.save_puzzle(path)
         except IOError as e:
-            dlg = wx.MessageDialog(None, "Fail saved: %s" % e ,
-                    "Save Error", wx.OK|wx.ICON_ERROR)
+            dlg = wx.MessageDialog(None, "Fail saved: %s" % e,
+                                   "Save Error", wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             dlg.Destroy()
             return
 
-
     def OnSave(self, event):
         """Save puzzle."""
-        
+
         self._save_puzzle()
-        
 
     def OnSaveAs(self, event):
         """Save-as puzzle."""
-        
+
         wildcard = "Across Lite Puzzle (*.puz)|*.puz"
 
         fname = suggestSafeFilename(self.puzzle.dirname, self.puzzle.filename)
         dlg = wx.FileDialog(
-            self, 
-            message="Save puzzle as ...", 
-            defaultDir=self.puzzle.dirname, 
-            defaultFile=fname, 
-            wildcard=wildcard, 
+            self,
+            message="Save puzzle as ...",
+            defaultDir=self.puzzle.dirname,
+            defaultFile=fname,
+            wildcard=wildcard,
             style=wx.SAVE
-            )
+        )
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             self._save_puzzle(path=path)
 
         dlg.Destroy()
-    
 
     def OnRevert(self, event):
         """Revert to saved version of puzzle."""
-        
+
         self.puzzle.revert_puzzle()
         self.board.DrawNow()
-    
 
-
-    #--------- Edit Menu
+    # --------- Edit Menu
 
 
 
@@ -561,7 +551,7 @@ class PuzzleWindow(BaseWindow,
         
         Often called by 
         """
-        
+
         dlg = wx.MessageDialog(self,
                                "Are you sure you want to clear the entire grid?",
                                "Clear Grid?",
@@ -578,7 +568,7 @@ class PuzzleWindow(BaseWindow,
 
     def OnSpecialAnswer(self, event):
         """Enter special answer in cell."""
-        
+
         self.board.SpecialAnswer()
 
     def OnTogglePen(self, event):
@@ -589,8 +579,7 @@ class PuzzleWindow(BaseWindow,
         self.GetMenuBar().FindItemById(self.ID_TOGGLE_PEN).SetText("Use %s\tCtrl-E" % tool)
         self.pen_button.SetValue(self.pencil)
 
-
-    #--------- Puzzle Menu
+    # --------- Puzzle Menu
 
 
     def OnShowNote(self, event):
@@ -600,43 +589,43 @@ class PuzzleWindow(BaseWindow,
 
     def OnCheckLetter(self, event):
         """Check letter under cursor."""
-        
+
         if self.puzzle.check_letter():
             self.board.DrawNow()
 
     def OnCheckWord(self, event):
         """Check current word."""
-        
+
         if self.puzzle.check_word():
             self.board.DrawNow()
 
     def OnCheckPuzzle(self, event):
         """Check entire puzzle."""
-        
+
         if self.puzzle.check_puzzle():
             self.board.DrawNow()
 
     def OnRevealLetter(self, event):
         """Reveal current letter."""
-        
+
         if self.puzzle.reveal_letter():
             self.board.DrawNow()
 
     def OnRevealWord(self, event):
         """Reveal curent word."""
-        
+
         if self.puzzle.reveal_word():
             self.board.DrawNow()
 
     def OnRevealPuzzle(self, event):
         """Reveal entire puzzle."""
-        
+
         if self.puzzle.reveal_puzzle():
             self.board.DrawNow()
 
     def OnRevealWrong(self, event):
         """Reveal incorrect letters."""
-        
+
         if self.puzzle.reveal_incorrect():
             self.board.DrawNow()
 
@@ -652,12 +641,12 @@ class PuzzleWindow(BaseWindow,
 
         else:
 
-            dlg = wx.MessageDialog(self, 
-                    "Depending on the speed of your computer, unlocking a"
-                    " puzzle can take several seconds. Once unlocked, you" 
-                    " can use the check and reveal features of the puzzle."
-                    "\n\nUnlock puzzle?",
-                    "Unlock Puzzle?", wx.OK|wx.CANCEL)
+            dlg = wx.MessageDialog(self,
+                                   "Depending on the speed of your computer, unlocking a"
+                                   " puzzle can take several seconds. Once unlocked, you"
+                                   " can use the check and reveal features of the puzzle."
+                                   "\n\nUnlock puzzle?",
+                                   "Unlock Puzzle?", wx.OK | wx.CANCEL)
             result = dlg.ShowModal()
             dlg.Destroy()
 
@@ -665,12 +654,12 @@ class PuzzleWindow(BaseWindow,
                 return
 
             dlg = wx.ProgressDialog(
-                    "Unlocking", 
-                    "Unlocking puzzle. This may take a moment.",
-                    maximum=8999,  # num of possibilities
-                    parent=self, 
-                    style=(wx.PD_APP_MODAL|wx.PD_CAN_ABORT
-                           |wx.PD_ELAPSED_TIME|wx.PD_AUTO_HIDE))
+                "Unlocking",
+                "Unlocking puzzle. This may take a moment.",
+                maximum=8999,  # num of possibilities
+                parent=self,
+                style=(wx.PD_APP_MODAL | wx.PD_CAN_ABORT
+                       | wx.PD_ELAPSED_TIME | wx.PD_AUTO_HIDE))
 
             # Key is from 1000-9999
 
@@ -688,15 +677,15 @@ class PuzzleWindow(BaseWindow,
                     # Updating dlg for every key attempt slows down loop;
                     # Do once every 25 times and it's still nicely responsive
                     # to canceling and updating time.
-                    (keep_going, skip) = dlg.Update(key-1000)
+                    (keep_going, skip) = dlg.Update(key - 1000)
                 key += 1
 
             dlg.Destroy()
 
-            #busy = PBI.PyBusyInfo("Decrypting; please wait...")
-            #wx.Yield()
+            # busy = PBI.PyBusyInfo("Decrypting; please wait...")
+            # wx.Yield()
 
-            #del busy
+            # del busy
 
         if not key:
             wx.MessageBox("Puzzle could not be unlocked.")
@@ -710,25 +699,24 @@ class PuzzleWindow(BaseWindow,
 
         wx.MessageBox("Puzzle successfully unlocked. Key was: %s" % key)
         if not wx.GetApp().config.no_cheats:
-            for i in [ self.ID_CHECK_LETTER,
-                       self.ID_CHECK_WORD,
-                       self.ID_CHECK_PUZZLE,
-                       self.ID_REVEAL_LETTER,
-                       self.ID_REVEAL_WORD,
-                       self.ID_REVEAL_PUZZLE,
-                       self.ID_REVEAL_WRONG,
-                       ]:
+            for i in [self.ID_CHECK_LETTER,
+                      self.ID_CHECK_WORD,
+                      self.ID_CHECK_PUZZLE,
+                      self.ID_REVEAL_LETTER,
+                      self.ID_REVEAL_WORD,
+                      self.ID_REVEAL_PUZZLE,
+                      self.ID_REVEAL_WRONG,
+                      ]:
                 self.GetMenuBar().FindItemById(i).Enable(True)
         self.GetMenuBar().FindItemById(self.ID_LOCK).Enable(True)
         self.GetMenuBar().FindItemById(self.ID_UNLOCK).Enable(False)
-            
 
     def OnLock(self, event):
         """Lock puzzle."""
 
         dlg = wx.TextEntryDialog(self,
-                "Enter a numeric code between 1000 and 9999 to lock puzzle.",
-                "Lock Puzzle")
+                                 "Enter a numeric code between 1000 and 9999 to lock puzzle.",
+                                 "Lock Puzzle")
         dlg.SetValue(str(random.randint(1000, 9999)))
 
         fail = False
@@ -741,7 +729,7 @@ class PuzzleWindow(BaseWindow,
             else:
                 if key < 1000 or key > 9999 or len(dlg.GetValue()) != 4:
                     fail = True
-            
+
             if fail:
                 wx.MessageBox("Invalid key. Lock operation failed.")
                 return
@@ -756,19 +744,18 @@ class PuzzleWindow(BaseWindow,
             self.puzzle.dirty = True
 
             wx.MessageBox("Puzzle successfully locked.")
-            for i in [ self.ID_CHECK_LETTER,
-                       self.ID_CHECK_WORD,
-                       self.ID_CHECK_PUZZLE,
-                       self.ID_REVEAL_LETTER,
-                       self.ID_REVEAL_WORD,
-                       self.ID_REVEAL_PUZZLE,
-                       self.ID_REVEAL_WRONG,
-                       self.ID_LOCK,
-                       ]:
+            for i in [self.ID_CHECK_LETTER,
+                      self.ID_CHECK_WORD,
+                      self.ID_CHECK_PUZZLE,
+                      self.ID_REVEAL_LETTER,
+                      self.ID_REVEAL_WORD,
+                      self.ID_REVEAL_PUZZLE,
+                      self.ID_REVEAL_WRONG,
+                      self.ID_LOCK,
+                      ]:
                 self.GetMenuBar().FindItemById(i).Enable(False)
             if not wx.GetApp().config.no_unlock:
                 self.GetMenuBar().FindItemById(self.ID_UNLOCK).Enable(True)
-
 
     def _cluesFontChange(self, delta):
         """Change font size of clue list."""
@@ -793,19 +780,18 @@ class PuzzleWindow(BaseWindow,
         minw = self.puzzle.width * 22
         minh = self.puzzle.height * 22 + 25
         w, h = self.Size
-        
+
         if event.IsChecked():
             self.splitter.InsertWindow(2, self.clues_panel, 200)
             minw += 150
-            self.SetSize((w+250, h))
+            self.SetSize((w + 250, h))
         else:
             self.splitter.DetachWindow(self.clues_panel)
             self.clues_panel.Hide()
-            self.SetSize((max(w-250, minw), h))
+            self.SetSize((max(w - 250, minw), h))
         logging.debug("Min size w=%s, h=%s", minw, minh)
         self.SetMinSize((minw, minh))
         self.OnSize(None)
-
 
     def OnOneAcross(self, event):
         """Lookup current clue in oneacross.com."""
@@ -816,16 +802,14 @@ class PuzzleWindow(BaseWindow,
         # Let's make sure this happens out-of-band.
         wx.CallAfter(OpenOneAcross, clue, word)
 
-
     def OnGoogle(self, event):
         """Lookup current clue in google.com."""
-        
+
         clue = self.puzzle.curr_clue()
         word = self.puzzle.curr_word_text()
         # Sometimes, using key shortcut keeps Puzzle highlit
         # Let's make sure this happens out-of-band.
         wx.CallAfter(OpenGoogle, clue, word)
-
 
     def OnFullScreen(self, event):
         """Switch to full-screen."""
@@ -835,8 +819,7 @@ class PuzzleWindow(BaseWindow,
         self.bottomsizer.Clear()
         self.ShowFullScreen(self.fullscreen)
 
-
-    #---------------- OTHER EVENTS
+    # ---------------- OTHER EVENTS
 
     def OnIdle(self, event):
         """Idle activities.
@@ -874,10 +857,10 @@ class PuzzleWindow(BaseWindow,
         for direction, idx, filled in self.puzzle.clues_completed_queue:
             if direction == "across":
                 self.across_clues.update_filled(idx, filled)
-            else:  
+            else:
                 self.down_clues.update_filled(idx, filled)
         self.puzzle.clues_completed_queue = []
-            
+
         # On OSX, this puts a black dot in the close button when puzzle
         # is dirty (a common OSX UI thing to do). On other systems, this
         # is a no-op.
@@ -944,7 +927,6 @@ class PuzzleWindow(BaseWindow,
             evt.SetShiftDown(True)
         self.splitter._OnMouse(evt)
 
-
     def OnChangingSplitter(self, evt):
         """Changing splitters between windows."""
 
@@ -953,7 +935,6 @@ class PuzzleWindow(BaseWindow,
             # Minimum size for each splitter
             evt.Veto()
         self.size_clue_text()
-
 
     def OnSize(self, evt=None):
         """Resizing window."""
@@ -968,13 +949,13 @@ class PuzzleWindow(BaseWindow,
 
         if self.share_panel.IsShown() and self.clues_panel.IsShown():
             self.splitter.SetSashPosition(0, 180)
-            self.splitter.SetSashPosition(1, ((w-180)*.65))
+            self.splitter.SetSashPosition(1, ((w - 180) * .65))
         elif self.share_panel.IsShown():
             self.splitter.SetSashPosition(0, 180)
         elif self.clues_panel.IsShown():
-            self.splitter.SetSashPosition(0, w*.55)
+            self.splitter.SetSashPosition(0, w * .55)
         else:
-            #self.splitter.SetSashPosition(0, w)
+            # self.splitter.SetSashPosition(0, w)
             pass
 
         self.splitter.SizeWindows()
@@ -982,5 +963,3 @@ class PuzzleWindow(BaseWindow,
             evt.Skip()
 
         self.size_clue_text()
-
-

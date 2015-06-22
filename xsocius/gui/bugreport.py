@@ -1,13 +1,11 @@
 """Bug report window."""
 
 import sys
-import io
-
-import wx
-import wx.lib.dialogs
-
 import pprint
 
+import io
+import wx
+import wx.lib.dialogs
 import xsocius.log
 from xsocius.utils import NAME, VERSION
 
@@ -36,7 +34,7 @@ def config_to_text(config):
 
     out.seek(0)
     return out.read()
-    
+
 
 def _read_file(fname):
     """Safely read a file.
@@ -53,16 +51,15 @@ def _read_file(fname):
 def showBugReport(config, error=""):
     sys.stderr.flush()
 
-    _ = { 'wxver': wx.version(),
-          'wxplatform':  wx.PlatformInfo,
-          'pyver': sys.version,
-          'prefs': config_to_text(config),
-          'logs': _read_file(xsocius.log.log_file),
-          'name': NAME,
-          'version': VERSION,
-          'error': error,
-    }
-
+    _ = {'wxver': wx.version(),
+         'wxplatform': wx.PlatformInfo,
+         'pyver': sys.version,
+         'prefs': config_to_text(config),
+         'logs': _read_file(xsocius.log.log_file),
+         'name': NAME,
+         'version': VERSION,
+         'error': error,
+         }
 
     body = """BUG REPORT TEMPLATE:
 
@@ -99,9 +96,7 @@ LOG:
 %(logs)s
 
 """ % _
-    dlg = wx.lib.dialogs.ScrolledMessageDialog(None, body, 
-            "Bug Report Details", size=(800,500))
+    dlg = wx.lib.dialogs.ScrolledMessageDialog(None, body,
+                                               "Bug Report Details", size=(800, 500))
     dlg.ShowModal()
     dlg.Destroy()
-
-

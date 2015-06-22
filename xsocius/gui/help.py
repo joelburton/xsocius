@@ -2,11 +2,14 @@
 
 """Help system."""
 
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 import webbrowser
 import logging
 
 import wx
+
 try:
     import wx.html2 as html2
 except ImportError:
@@ -21,7 +24,7 @@ def ShowHelp():
     """Show HTML help file."""
 
     url = "file:///" + urllib.parse.quote(get_help('index.html'))
-        
+
     if html2 is not None:
         title = "%s Help" % NAME
         logging.info("Opening BrowserWindow at %s", url)

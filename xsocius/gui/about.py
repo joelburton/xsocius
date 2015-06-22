@@ -4,7 +4,6 @@ import webbrowser
 
 import wx
 import wx.html
-
 from xsocius.utils import NAME, VERSION, URL
 from xsocius.gui.utils import get_icon
 
@@ -44,7 +43,7 @@ ABOUT = """
  </font>
 </body>
 </html>
-""" % (get_icon(NAME.lower()+'.gif'), NAME, VERSION, URL, URL)
+""" % (get_icon(NAME.lower() + '.gif'), NAME, VERSION, URL, URL)
 
 
 class AboutHtmlWindow(wx.html.HtmlWindow):

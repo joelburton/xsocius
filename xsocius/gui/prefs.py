@@ -39,8 +39,8 @@ def h2wx_color(color):
 def color_select(self, value):
     """Make a colour select widget."""
 
-    return csel.ColourSelect(self, wx.ID_ANY, "", 
-            h2wx_color(value), size=(25,25))
+    return csel.ColourSelect(self, wx.ID_ANY, "",
+                             h2wx_color(value), size=(25, 25))
 
 
 def _checkbox(self, text, default):
@@ -74,7 +74,7 @@ class FakePuzzle(object):
 # individual panes made, along with the overall dialog layout.
 
 
-    
+
 class AppearancePrefs(wx.Panel, PresentationBoardMixin):
     """Preferences for graphic/text flags and display of clue lists."""
 
@@ -88,74 +88,74 @@ class AppearancePrefs(wx.Panel, PresentationBoardMixin):
         self.config = config
 
         flag_label = makeHeading(self, "Puzzle Flags")
-        self.flag_graphic_cbox = _checkbox(self, 
-                "Show by graphic color", config.flag_graphic)
-        self.flag_letter_cbox = _checkbox(self, 
-                "Show by text color", config.flag_letter)
+        self.flag_graphic_cbox = _checkbox(self,
+                                           "Show by graphic color", config.flag_graphic)
+        self.flag_letter_cbox = _checkbox(self,
+                                          "Show by text color", config.flag_letter)
 
         # Window where we'll show effect of flags/colors
         self.puzzle_win = wx.Window(self, wx.ID_ANY, size=(200, 50))
         self.puzzle_win.SetBackgroundColour("Red")
 
-        self.letter_error_label =   makeText(self, "Incorrect letter color:")
+        self.letter_error_label = makeText(self, "Incorrect letter color:")
         self.letter_checked_label = makeText(self, "Checked letter color:")
-        self.letter_cheat_label =   makeText(self, "Revealed letter color:")
-        self.letter_error =   color_select(self, config.letter_error_color)
+        self.letter_cheat_label = makeText(self, "Revealed letter color:")
+        self.letter_error = color_select(self, config.letter_error_color)
         self.letter_checked = color_select(self, config.letter_checked_color)
-        self.letter_cheat =   color_select(self, config.letter_cheat_color)
+        self.letter_cheat = color_select(self, config.letter_cheat_color)
 
-        self.graphic_error_label =   makeText(self, "Incorrect symbol color:")
+        self.graphic_error_label = makeText(self, "Incorrect symbol color:")
         self.graphic_checked_label = makeText(self, "Checked symbol color:")
-        self.graphic_cheat_label =   makeText(self, "Revealed symbol color:")
-        self.graphic_error =   color_select(self, config.graphic_error_color)
+        self.graphic_cheat_label = makeText(self, "Revealed symbol color:")
+        self.graphic_error = color_select(self, config.graphic_error_color)
         self.graphic_checked = color_select(self, config.graphic_checked_color)
-        self.graphic_cheat =   color_select(self, config.graphic_cheat_color)
+        self.graphic_cheat = color_select(self, config.graphic_cheat_color)
 
         self.reset = wx.Button(self, wx.ID_ANY, "Reset to Defaults")
 
         show_clues_label = makeHeading(self, "Clue List")
-        self.show_clues = _checkbox(self, "Opens automatically with puzzle", 
-                config.show_clues)
-        self.grey_filled_clues = _checkbox(self, 
-                "Lighten clues once filled in?",
-                config.grey_filled_clues)
+        self.show_clues = _checkbox(self, "Opens automatically with puzzle",
+                                    config.show_clues)
+        self.grey_filled_clues = _checkbox(self,
+                                           "Lighten clues once filled in?",
+                                           config.grey_filled_clues)
 
         sizer = wx.FlexGridSizer(rows=3, cols=5, vgap=0, hgap=5)
-        sizer.AddMany( [ (self.letter_checked_label),
-                         (self.letter_checked),
-                         (0, 0),
-                         (self.graphic_checked_label),
-                         (self.graphic_checked),
+        sizer.AddMany([(self.letter_checked_label),
+                       (self.letter_checked),
+                       (0, 0),
+                       (self.graphic_checked_label),
+                       (self.graphic_checked),
 
-                         (self.letter_error_label),
-                         (self.letter_error),
-                         (0, 0),
-                         (self.graphic_error_label),
-                         (self.graphic_error),
+                       (self.letter_error_label),
+                       (self.letter_error),
+                       (0, 0),
+                       (self.graphic_error_label),
+                       (self.graphic_error),
 
-                         (self.letter_cheat_label),
-                         (self.letter_cheat),
-                         (0, 0),
-                         (self.graphic_cheat_label),
-                         (self.graphic_cheat),
-                       ] )
+                       (self.letter_cheat_label),
+                       (self.letter_cheat),
+                       (0, 0),
+                       (self.graphic_cheat_label),
+                       (self.graphic_cheat),
+                       ])
         osizer = wx.BoxSizer(wx.VERTICAL)
-        osizer.AddMany( [ 
-                         (flag_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                         (self.puzzle_win, 0, wx.LEFT, 30),
-                         (15, 15),
-                         (self.flag_letter_cbox, 0, wx.LEFT|wx.RIGHT, 30),
-                         (self.flag_graphic_cbox, 0, wx.LEFT|wx.RIGHT, 30),
-                         (15, 15),
-                         (sizer, 0, wx.LEFT, 30),
-                         (10, 10),
-                         (self.reset, 0, wx.LEFT, 30),
-                         (10, 10),
-                         (show_clues_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                         (self.show_clues, 0, wx.LEFT|wx.RIGHT,30),
-                         (self.grey_filled_clues, 0, wx.LEFT|wx.RIGHT,30),
-                         (20, 20),
-                         ])
+        osizer.AddMany([
+            (flag_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.puzzle_win, 0, wx.LEFT, 30),
+            (15, 15),
+            (self.flag_letter_cbox, 0, wx.LEFT | wx.RIGHT, 30),
+            (self.flag_graphic_cbox, 0, wx.LEFT | wx.RIGHT, 30),
+            (15, 15),
+            (sizer, 0, wx.LEFT, 30),
+            (10, 10),
+            (self.reset, 0, wx.LEFT, 30),
+            (10, 10),
+            (show_clues_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.show_clues, 0, wx.LEFT | wx.RIGHT, 30),
+            (self.grey_filled_clues, 0, wx.LEFT | wx.RIGHT, 30),
+            (20, 20),
+        ])
         self.SetSizer(osizer)
 
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdate)
@@ -168,7 +168,6 @@ class AppearancePrefs(wx.Panel, PresentationBoardMixin):
         self.makeFakePuzzle()
         self.updateBoard(None)
 
-
     def makeFakePuzzle(self):
         """Construct mini fake puzzle for demo display of appearance."""
 
@@ -177,28 +176,27 @@ class AppearancePrefs(wx.Panel, PresentationBoardMixin):
         clue3 = Clue(num=3)
         clue4 = Clue(num=4)
 
-        cell1 = Cell(0, 0, down=clue1, response="D", 
-                checked=False, revealed=False)
-        cell2 = Cell(1, 0, down=clue2, response="E", 
-                checked=True, revealed=False, answer="E")
-        cell3 = Cell(2, 0, down=clue3, response="M", 
-                checked=True, revealed=False, answer="Z")
-        cell4 = Cell(3, 0, down=clue4, response="O", 
-                checked=False, revealed=True)
+        cell1 = Cell(0, 0, down=clue1, response="D",
+                     checked=False, revealed=False)
+        cell2 = Cell(1, 0, down=clue2, response="E",
+                     checked=True, revealed=False, answer="E")
+        cell3 = Cell(2, 0, down=clue3, response="M",
+                     checked=True, revealed=False, answer="Z")
+        cell4 = Cell(3, 0, down=clue4, response="O",
+                     checked=False, revealed=True)
 
         clue1.cell = cell1
         clue2.cell = cell2
         clue3.cell = cell3
         clue4.cell = cell4
- 
+
         self.puzzle = FakePuzzle()
-        self.puzzle.grid = [ [cell1], [cell2], [cell3], [cell4] ]
-        self.puzzle.clues = [ None, clue1, clue2, clue3, clue4 ]
+        self.puzzle.grid = [[cell1], [cell2], [cell3], [cell4]]
+        self.puzzle.clues = [None, clue1, clue2, clue3, clue4]
         self.puzzle.height = 1
         self.puzzle.width = 4
-        
-        self.rects = [[wx.Rect() for y in range(1)] for x in range(4)]
 
+        self.rects = [[wx.Rect() for y in range(1)] for x in range(4)]
 
     def setupColors(self):
         """Setup colors for drawing."""
@@ -206,53 +204,51 @@ class AppearancePrefs(wx.Panel, PresentationBoardMixin):
         # Copied from board, so we don't use the saved colors, but the
         # ones here.
 
-        self.letter_normal_color =   "Black"
-        self.letter_error_color =    self.letter_error.GetValue()
-        self.letter_checked_color =  self.letter_checked.GetValue()
-        self.letter_cheat_color =    self.letter_cheat.GetValue()
-        self.graphic_error_color =   self.graphic_error.GetValue()
+        self.letter_normal_color = "Black"
+        self.letter_error_color = self.letter_error.GetValue()
+        self.letter_checked_color = self.letter_checked.GetValue()
+        self.letter_cheat_color = self.letter_cheat.GetValue()
+        self.graphic_error_color = self.graphic_error.GetValue()
         self.graphic_checked_color = self.graphic_checked.GetValue()
-        self.graphic_cheat_color =   self.graphic_cheat.GetValue()
+        self.graphic_cheat_color = self.graphic_cheat.GetValue()
 
-        self.graphic_error_pen =     wx.Pen(self.graphic_error_color)
-        self.graphic_checked_pen =   wx.Pen(self.graphic_checked_color)
-        self.graphic_cheat_pen =     wx.Pen(self.graphic_cheat_color)
-        self.graphic_error_brush =   wx.Brush(self.graphic_error_color)
+        self.graphic_error_pen = wx.Pen(self.graphic_error_color)
+        self.graphic_checked_pen = wx.Pen(self.graphic_checked_color)
+        self.graphic_cheat_pen = wx.Pen(self.graphic_cheat_color)
+        self.graphic_error_brush = wx.Brush(self.graphic_error_color)
         self.graphic_checked_brush = wx.Brush(self.graphic_checked_color)
-        self.graphic_cheat_brush =   wx.Brush(self.graphic_cheat_color)
-        self.circle_pen =            wx.Pen("#777777")
-        self.circle_brush =          wx.Brush("#DDDDDD")
+        self.graphic_cheat_brush = wx.Brush(self.graphic_cheat_color)
+        self.circle_pen = wx.Pen("#777777")
+        self.circle_brush = wx.Brush("#DDDDDD")
 
         self.flag_graphic = self.flag_graphic_cbox.GetValue()
         self.flag_letter = self.flag_letter_cbox.GetValue()
 
-        self.color_cell_pen = wx.Pen("Black")               
+        self.color_cell_pen = wx.Pen("Black")
 
-        self.cell_normal_brush =    wx.Brush("White")
-
+        self.cell_normal_brush = wx.Brush("White")
 
     def OnUpdate(self, event):
         """Only allow choosing colors if that type of flag is enabled."""
 
         item = event.GetEventObject()
-        if item in (self.letter_error, 
-                    self.letter_checked, 
+        if item in (self.letter_error,
+                    self.letter_checked,
                     self.letter_cheat,
-                    self.letter_error_label, 
-                    self.letter_checked_label, 
+                    self.letter_error_label,
+                    self.letter_checked_label,
                     self.letter_cheat_label):
             event.Enable(self.flag_letter_cbox.IsChecked())
 
-        elif item in (self.graphic_error, 
-                      self.graphic_checked, 
+        elif item in (self.graphic_error,
+                      self.graphic_checked,
                       self.graphic_cheat,
-                      self.graphic_error_label, 
-                      self.graphic_checked_label, 
+                      self.graphic_error_label,
+                      self.graphic_checked_label,
                       self.graphic_cheat_label):
             event.Enable(self.flag_graphic_cbox.IsChecked())
         else:
             event.Skip()
-
 
     def updateBoard(self, event):
         """Draw board."""
@@ -270,12 +266,10 @@ class AppearancePrefs(wx.Panel, PresentationBoardMixin):
         self.Refresh()
         self.Update()
 
-
     def OnPaint(self, event):
         """Paint the board."""
 
         wx.BufferedPaintDC(self.puzzle_win, self.buffer)
-
 
     def OnReset(self, event):
         """Reset options to default."""
@@ -289,33 +283,31 @@ class AppearancePrefs(wx.Panel, PresentationBoardMixin):
         self.graphic_cheat.SetValue(config.graphic_cheat_color_default)
         self.updateBoard(None)
 
-
     def write(self, config):
         """Save options."""
 
         config.letter_error_color = wx2hex_color(
-                self.letter_error.GetValue())
+            self.letter_error.GetValue())
 
         config.letter_checked_color = wx2hex_color(
-                self.letter_checked.GetValue())
+            self.letter_checked.GetValue())
 
         config.letter_cheat_color = wx2hex_color(
-                self.letter_cheat.GetValue())
+            self.letter_cheat.GetValue())
 
         config.graphic_error_color = wx2hex_color(
-                self.graphic_error.GetValue())
+            self.graphic_error.GetValue())
 
         config.graphic_checked_color = wx2hex_color(
-                self.graphic_checked.GetValue())
+            self.graphic_checked.GetValue())
 
         config.graphic_cheat_color = wx2hex_color(
-                self.graphic_cheat.GetValue())
+            self.graphic_cheat.GetValue())
 
         config.show_clues = self.show_clues.IsChecked()
         config.grey_filled_clues = self.grey_filled_clues.IsChecked()
         config.flag_graphic = self.flag_graphic_cbox.IsChecked()
         config.flag_letter = self.flag_letter_cbox.IsChecked()
-
 
 
 class SolvingPrefs(wx.Panel):
@@ -325,66 +317,65 @@ class SolvingPrefs(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         one_across_label = makeHeading(self, "OneAcross / Google Lookup")
-        self.browser = wx.Choice(self, wx.ID_ANY, 
-                choices = [ INT_BROWSER, EXT_BROWSER ])
+        self.browser = wx.Choice(self, wx.ID_ANY,
+                                 choices=[INT_BROWSER, EXT_BROWSER])
         if config.internal_browser:
             self.browser.SetSelection(0)
         else:
             self.browser.SetSelection(1)
 
         keynav_label = makeHeading(self, "Keyboard Navigation")
-        self.skip_filled = _checkbox(self, 
-                "Skip filled letters when entering word", config.skip_filled)
-        self.end_at_word = _checkbox(self, 
-                "Stop at word end when entering word", config.end_at_word)
+        self.skip_filled = _checkbox(self,
+                                     "Skip filled letters when entering word", config.skip_filled)
+        self.end_at_word = _checkbox(self,
+                                     "Stop at word end when entering word", config.end_at_word)
 
         tourn_label = makeHeading(self, "Tournament Settings")
-        self.no_cheats = _checkbox(self, 
-                "Disable checking/revealing answers", 
-                config.no_cheats)
-        self.no_autowin = _checkbox(self, 
-                "Disable auto-notification of puzzle completion",
-                config.no_autowin)
-        self.no_unlock = _checkbox(self, 
-                "Disable puzzle solution unlocking", config.no_unlock)
-        self.no_oneacross = _checkbox(self, 
-                "Disable OneAcross.com assistance", config.no_oneacross)
-        self.timer_autostart = _checkbox(self, 
-                "Start timer on puzzle start", config.timer_autostart)
-        self.no_timerpause = _checkbox(self, 
-                "Disable pausing timer", config.no_timerpause)
+        self.no_cheats = _checkbox(self,
+                                   "Disable checking/revealing answers",
+                                   config.no_cheats)
+        self.no_autowin = _checkbox(self,
+                                    "Disable auto-notification of puzzle completion",
+                                    config.no_autowin)
+        self.no_unlock = _checkbox(self,
+                                   "Disable puzzle solution unlocking", config.no_unlock)
+        self.no_oneacross = _checkbox(self,
+                                      "Disable OneAcross.com assistance", config.no_oneacross)
+        self.timer_autostart = _checkbox(self,
+                                         "Start timer on puzzle start", config.timer_autostart)
+        self.no_timerpause = _checkbox(self,
+                                       "Disable pausing timer", config.no_timerpause)
 
         solving_label = makeHeading(self, "Solving Feedback")
         self.flash_correct = _checkbox(self,
-                "Flash when word completed correctly",
-                config.flash_correct)
+                                       "Flash when word completed correctly",
+                                       config.flash_correct)
 
         osizer = wx.BoxSizer(wx.VERTICAL)
-        osizer.AddMany( [ 
-                         (one_across_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                         (self.browser, 0, wx.LEFT, 30), 
-                         (10, 10),
-                         (keynav_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                         (self.skip_filled, 0, wx.LEFT, 30),
-                         (self.end_at_word, 0, wx.LEFT, 30),
-                         (10, 10),
-                         (tourn_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                         (self.no_cheats, 0, wx.LEFT, 30),
-                         (self.no_autowin, 0, wx.LEFT, 30),
-                         (self.no_unlock, 0, wx.LEFT, 30),
-                         (self.no_oneacross, 0, wx.LEFT, 30),
-                         (self.timer_autostart, 0, wx.LEFT, 30),
-                         (self.no_timerpause, 0, wx.LEFT, 50),
-                         (10,10),
-                         (solving_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                         (self.flash_correct, 0, wx.LEFT, 30),
-                         (20, 20),
-                         ])
+        osizer.AddMany([
+            (one_across_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.browser, 0, wx.LEFT, 30),
+            (10, 10),
+            (keynav_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.skip_filled, 0, wx.LEFT, 30),
+            (self.end_at_word, 0, wx.LEFT, 30),
+            (10, 10),
+            (tourn_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.no_cheats, 0, wx.LEFT, 30),
+            (self.no_autowin, 0, wx.LEFT, 30),
+            (self.no_unlock, 0, wx.LEFT, 30),
+            (self.no_oneacross, 0, wx.LEFT, 30),
+            (self.timer_autostart, 0, wx.LEFT, 30),
+            (self.no_timerpause, 0, wx.LEFT, 50),
+            (10, 10),
+            (solving_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.flash_correct, 0, wx.LEFT, 30),
+            (20, 20),
+        ])
         self.SetSizer(osizer)
 
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdate)
 
-    
     def OnUpdate(self, event):
         """Manage enabling of timer-pause based on timer auto-start."""
 
@@ -396,7 +387,6 @@ class SolvingPrefs(wx.Panel):
                 event.Enable(True)
         else:
             event.Skip()
-
 
     def write(self, config):
         """Save options."""
@@ -421,49 +411,47 @@ class StartupPrefs(wx.Panel):
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         reopen_label = makeHeading(self, "On Startup")
-        self.reopen = _checkbox(self, 
-                "Re-open puzzles from last session", config.reopen)
+        self.reopen = _checkbox(self,
+                                "Re-open puzzles from last session", config.reopen)
         self.note_on_open = _checkbox(self,
-                "Show puzzle note on open", config.note_on_open)
-        self.show_tips = _checkbox(self, 
-                "Show tip of the day", config.show_tips)
-        self.check_upgrades = _checkbox(self, 
-                "Check for upgrades", config.check_upgrades)
+                                      "Show puzzle note on open", config.note_on_open)
+        self.show_tips = _checkbox(self,
+                                   "Show tip of the day", config.show_tips)
+        self.check_upgrades = _checkbox(self,
+                                        "Check for upgrades", config.check_upgrades)
         self.checknow = wx.Button(self, wx.ID_ANY, "Check for Upgrades Now")
 
         none_label = makeHeading(self, "If No Puzzles Are Opened")
-        self.web = wx.RadioButton(self, wx.ID_ANY, 
-                "Show Web Puzzle chooser", style=wx.RB_GROUP)
-        self.openfile = wx.RadioButton(self, wx.ID_ANY, 
-                "Show standard Open File chooser")
-        self.join = wx.RadioButton(self, wx.ID_ANY, 
-                "Join shared puzzle with friend")
+        self.web = wx.RadioButton(self, wx.ID_ANY,
+                                  "Show Web Puzzle chooser", style=wx.RB_GROUP)
+        self.openfile = wx.RadioButton(self, wx.ID_ANY,
+                                       "Show standard Open File chooser")
+        self.join = wx.RadioButton(self, wx.ID_ANY,
+                                   "Join shared puzzle with friend")
         self.nothing = wx.RadioButton(self, wx.ID_ANY, "Do nothing")
-
 
         self.read(config)
 
         sizer.AddMany([
-                (reopen_label, 0, wx.ALL, 10),
-                (self.reopen, 0, wx.LEFT, 30),
-                (self.note_on_open, 0, wx.LEFT, 30),
-                (self.show_tips, 0, wx.LEFT, 30),
-                (self.check_upgrades, 0, wx.LEFT, 30),
-                (5, 5),
-                (self.checknow, 0, wx.LEFT, 30),
-                (10, 10),
-                (none_label, 0, wx.ALL, 10),
-                (self.web, 0, wx.LEFT, 30),
-                (self.openfile, 0, wx.LEFT, 30),
-                (self.join, 0, wx.LEFT, 30),
-                (self.nothing, 0, wx.LEFT, 30),
-                (20, 20),
-                ])
+            (reopen_label, 0, wx.ALL, 10),
+            (self.reopen, 0, wx.LEFT, 30),
+            (self.note_on_open, 0, wx.LEFT, 30),
+            (self.show_tips, 0, wx.LEFT, 30),
+            (self.check_upgrades, 0, wx.LEFT, 30),
+            (5, 5),
+            (self.checknow, 0, wx.LEFT, 30),
+            (10, 10),
+            (none_label, 0, wx.ALL, 10),
+            (self.web, 0, wx.LEFT, 30),
+            (self.openfile, 0, wx.LEFT, 30),
+            (self.join, 0, wx.LEFT, 30),
+            (self.nothing, 0, wx.LEFT, 30),
+            (20, 20),
+        ])
         self.SetSizer(sizer)
         sizer.Fit(self)
 
         self.Bind(wx.EVT_BUTTON, self.OnCheckNow, self.checknow)
-
 
     def OnCheckNow(self, event):
         """Check for upgrades right now."""
@@ -475,9 +463,7 @@ class StartupPrefs(wx.Panel):
         prompt_update_version(None, newest, update, date)
         if newest == VERSION:
             wx.MessageBox("You are running the latest version: %s." % newest,
-                    "Version Check")
-
-
+                          "Version Check")
 
     def read(self, config):
         """Read initial settings."""
@@ -492,7 +478,6 @@ class StartupPrefs(wx.Panel):
             self.join.SetValue(True)
         elif method == "none":
             self.nothing.SetValue(True)
-
 
     def write(self, config):
         """Save settings."""
@@ -515,7 +500,6 @@ class StartupPrefs(wx.Panel):
         config.openmethod = method
 
 
-
 class SharingPrefs(wx.Panel):
     """Pref for sharing: connection info, auto-connect, and invisibility."""
 
@@ -524,75 +508,73 @@ class SharingPrefs(wx.Panel):
 
         label = makeHeading(self, "Google Talk/Jabber Connection Information")
         explain = wx.StaticText(self, wx.ID_ANY,
-                "This is optional, but if entered, will be default" +
-                " information for logging in to connections.")
+                                "This is optional, but if entered, will be default" +
+                                " information for logging in to connections.")
 
         sizer = addLogOnDialogOptions(self, config)
 
-        skip_conn_dlg_label = makeHeading(self, 
-                "On Sharing or Joining a Shared Puzzle")
-        self.skip_conn_dlg = _checkbox(self, 
-                "Skip prompting for information and always use above", 
-                config.skip_conn_dlg)
+        skip_conn_dlg_label = makeHeading(self,
+                                          "On Sharing or Joining a Shared Puzzle")
+        self.skip_conn_dlg = _checkbox(self,
+                                       "Skip prompting for information and always use above",
+                                       config.skip_conn_dlg)
 
-        self.invisible = _checkbox(self, "Stay invisible while connecting", 
-                config.invisible)
+        self.invisible = _checkbox(self, "Stay invisible while connecting",
+                                   config.invisible)
         invisible_explain = makeHint(self,
-                "If checked, this does not reveal your presence on IM" +
-                " during game connecion. Others won't see\n" + 
-                "you online, but your friend will have to enter" +
-                " an invitation code to play with you. See help for details.")
+                                     "If checked, this does not reveal your presence on IM" +
+                                     " during game connecion. Others won't see\n" +
+                                     "you online, but your friend will have to enter" +
+                                     " an invitation code to play with you. See help for details.")
 
         autoend_im_label = makeHeading(self, "In-Game Messaging")
-        self.autoend_im = _checkbox(self, 
-                "Sending message in game automatically returns" +
-                " keyboard focus to grid", 
-                config.autoend_im)
-        self.im_sound = _checkbox(self, 
-                "Play sound when receiving IM", config.im_sound)
-        self.im_flash = _checkbox(self, 
-                "Flash window when receiving IM", config.im_flash)
+        self.autoend_im = _checkbox(self,
+                                    "Sending message in game automatically returns" +
+                                    " keyboard focus to grid",
+                                    config.autoend_im)
+        self.im_sound = _checkbox(self,
+                                  "Play sound when receiving IM", config.im_sound)
+        self.im_flash = _checkbox(self,
+                                  "Flash window when receiving IM", config.im_flash)
 
         outsizer = wx.BoxSizer(wx.VERTICAL)
         outsizer.AddMany([
-                (label, 0, wx.LEFT|wx.TOP, 10),
-                (10, 10),
-                (explain, 0, wx.LEFT, 30),
-                (10, 10),
-                (sizer, 0, wx.LEFT, 30),
-                (10, 10),
-                (skip_conn_dlg_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                (self.skip_conn_dlg, 0, wx.LEFT, 30),
-                (5, 5),
-                (self.invisible, 0, wx.LEFT, 30),
-                (5, 5),
-                (invisible_explain, 0, wx.LEFT|wx.RIGHT, 50),
-                (8, 8),
-                (autoend_im_label, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10),
-                (self.autoend_im, 0, wx.LEFT|wx.RIGHT, 30),
-                (self.im_sound, 0, wx.LEFT|wx.RIGHT, 30),
-                (self.im_flash, 0, wx.LEFT|wx.RIGHT, 30),
-                (20, 20),
-                ])
+            (label, 0, wx.LEFT | wx.TOP, 10),
+            (10, 10),
+            (explain, 0, wx.LEFT, 30),
+            (10, 10),
+            (sizer, 0, wx.LEFT, 30),
+            (10, 10),
+            (skip_conn_dlg_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.skip_conn_dlg, 0, wx.LEFT, 30),
+            (5, 5),
+            (self.invisible, 0, wx.LEFT, 30),
+            (5, 5),
+            (invisible_explain, 0, wx.LEFT | wx.RIGHT, 50),
+            (8, 8),
+            (autoend_im_label, 0, wx.LEFT | wx.TOP | wx.BOTTOM, 10),
+            (self.autoend_im, 0, wx.LEFT | wx.RIGHT, 30),
+            (self.im_sound, 0, wx.LEFT | wx.RIGHT, 30),
+            (self.im_flash, 0, wx.LEFT | wx.RIGHT, 30),
+            (20, 20),
+        ])
         self.SetSizer(outsizer)
         sizer.Fit(self)
 
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdate)
 
-
     def OnUpdate(self, event):
         """Only allow skip-dialog if everything filled out."""
 
         if event.GetId() == self.skip_conn_dlg.GetId():
-            complete = ( bool(self.server.GetValue()) and
-                         bool(self.username.GetValue()) and
-                         bool(self.password.GetValue()))
+            complete = (bool(self.server.GetValue()) and
+                        bool(self.username.GetValue()) and
+                        bool(self.password.GetValue()))
             event.Enable(complete)
             if not complete:
                 event.Check(False)
         else:
             event.Skip()
-                      
 
     def write(self, config):
         """Save settings."""
@@ -610,7 +592,7 @@ class SharingPrefs(wx.Panel):
 class WebPuzzlePrefs(wx.Panel):
     """Prefs for managing web openers."""
 
-    idx = None # which is selected now
+    idx = None  # which is selected now
 
     def __init__(self, parent, config):
         wx.Panel.__init__(self, parent)
@@ -623,7 +605,7 @@ class WebPuzzlePrefs(wx.Panel):
 
         self.add = wx.Button(self, wx.ID_ANY, "Add Puzzle")
         self.delete = wx.Button(self, wx.ID_ANY, "Delete Puzzle")
-        rsizer.AddMany( [ (self.add), (10, 10), (self.delete) ])
+        rsizer.AddMany([(self.add), (10, 10), (self.delete)])
 
         editbox = wx.StaticBox(self, wx.ID_ANY, "Puzzle Details")
         editsizer = wx.StaticBoxSizer(editbox, wx.VERTICAL)
@@ -634,17 +616,17 @@ class WebPuzzlePrefs(wx.Panel):
         self.url = wx.TextCtrl(self, wx.ID_ANY)
         url_help = wx.StaticText(self, wx.ID_ANY, URL_HELP)
 
-        url_help.SetFont(wx.Font(font_scale(9), 
-                    wx.FONTFAMILY_DEFAULT, 
-                    wx.FONTSTYLE_NORMAL, 
-                    wx.FONTWEIGHT_NORMAL))
+        url_help.SetFont(wx.Font(font_scale(9),
+                                 wx.FONTFAMILY_DEFAULT,
+                                 wx.FONTSTYLE_NORMAL,
+                                 wx.FONTWEIGHT_NORMAL))
         url_help.SetForegroundColour("#444444")
 
         desc_label = wx.StaticText(self, wx.ID_ANY, "Description")
         self.desc = wx.TextCtrl(self, wx.ID_ANY)
 
         days_label = wx.StaticText(self, wx.ID_ANY, "Days Puzzle is Expected")
-        
+
         days_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.d1 = wx.CheckBox(self, wx.ID_ANY, "M ")
         self.d2 = wx.CheckBox(self, wx.ID_ANY, "Tu ")
@@ -653,23 +635,23 @@ class WebPuzzlePrefs(wx.Panel):
         self.d5 = wx.CheckBox(self, wx.ID_ANY, "F ")
         self.d6 = wx.CheckBox(self, wx.ID_ANY, "Sa ")
         self.d7 = wx.CheckBox(self, wx.ID_ANY, "Su ")
-        days_sizer.AddMany([ (self.d1), (self.d2), (self.d3), (self.d4), 
-                             (self.d5), (self.d6), (self.d7) ])
+        days_sizer.AddMany([(self.d1), (self.d2), (self.d3), (self.d4),
+                            (self.d5), (self.d6), (self.d7)])
 
         self.enabled = wx.CheckBox(self, wx.ID_ANY, "Enabled?")
-        editsizer.AddMany([ ( name_label, 0, wx.BOTTOM, 3 ),
-                         ( self.name, 0, wx.BOTTOM|wx.EXPAND, 10 ), 
-                         ( url_label, 0, wx.BOTTOM, 3 ), 
-                         ( self.url, 0, wx.EXPAND ), 
-                         ( url_help, 0, wx.BOTTOM, 10 ),
-                         ( desc_label, 0, wx.BOTTOM, 3),
-                         ( self.desc, 0, wx.BOTTOM|wx.EXPAND, 10 ),
-                         ( days_label, 0, wx.BOTTOM, 3),
-                         ( days_sizer ),
-                         ( self.enabled, 0, wx.TOP, 10 ) ])
+        editsizer.AddMany([(name_label, 0, wx.BOTTOM, 3),
+                           (self.name, 0, wx.BOTTOM | wx.EXPAND, 10),
+                           (url_label, 0, wx.BOTTOM, 3),
+                           (self.url, 0, wx.EXPAND),
+                           (url_help, 0, wx.BOTTOM, 10),
+                           (desc_label, 0, wx.BOTTOM, 3),
+                           (self.desc, 0, wx.BOTTOM | wx.EXPAND, 10),
+                           (days_label, 0, wx.BOTTOM, 3),
+                           (days_sizer),
+                           (self.enabled, 0, wx.TOP, 10)])
 
-        rsizer.Add(editsizer, 0, wx.EXPAND|wx.TOP, 20)
-        sizer.Add(rsizer, 1, wx.EXPAND|wx.ALL, 10)
+        rsizer.Add(editsizer, 0, wx.EXPAND | wx.TOP, 20)
+        sizer.Add(rsizer, 1, wx.EXPAND | wx.ALL, 10)
 
         self.SetSizer(sizer)
 
@@ -681,28 +663,26 @@ class WebPuzzlePrefs(wx.Panel):
 
         self.enabler(False)
 
-
     def OnAdd(self, event):
         """Add a blank opener to the list."""
 
         idx = len(self.web_openers)
-        new = {'id': 'user:%s' % idx, 
-               'name':'Untitled', 
-               'url':'http://', 
-               'days':'',
-               'desc':'', 
-               'enabled':True, 
+        new = {'id': 'user:%s' % idx,
+               'name': 'Untitled',
+               'url': 'http://',
+               'days': '',
+               'desc': '',
+               'enabled': True,
                'icon': 'generic.png'}
         self.web_openers.append(new)
-        
+
         self.lst.InsertImageStringItem(
-                idx, 
-                new['name'], 
-                self.lst.imgl.Add(wx.Bitmap(get_icon(new['icon']))))
+            idx,
+            new['name'],
+            self.lst.imgl.Add(wx.Bitmap(get_icon(new['icon']))))
         self.lst.enableItem(idx, True)
         self.lst.Select(idx)
         self.lst.Focus(idx)
-
 
     def OnDelete(self, event):
         """Delete opener from the list."""
@@ -717,8 +697,7 @@ class WebPuzzlePrefs(wx.Panel):
         self.enabled.SetValue(False)
         for d in range(1, 8):
             getattr(self, 'd%s' % d).SetValue(False)
-        
-        
+
     def enabler(self, enable=True, enable_edit=False):
         """Enable/disable editing."""
 
@@ -729,7 +708,6 @@ class WebPuzzlePrefs(wx.Panel):
             getattr(self, 'd%s' % d).Enable(enable_edit)
         self.enabled.Enable(enable)
         self.delete.Enable(enable_edit)
-
 
     def OnItemSelected(self, event):
         """Item selected.
@@ -748,9 +726,8 @@ class WebPuzzlePrefs(wx.Panel):
             getattr(self, 'd%s' % d).SetValue(str(d) in opener['days'])
         self.enabled.SetValue(opener['enabled'])
         self.idx = idx
-        
 
-    def OnItemDeselected(self, event): 
+    def OnItemDeselected(self, event):
         """Item deselected.
 
            Save into the openers dict.
@@ -762,25 +739,22 @@ class WebPuzzlePrefs(wx.Panel):
         opener['url'] = self.url.GetValue()
         opener['desc'] = self.desc.GetValue()
         days = "".join(
-                [ str(d) for d in range(1,8) 
-                        if getattr(self, 'd%s' % d).IsChecked() ])
+            [str(d) for d in range(1, 8)
+             if getattr(self, 'd%s' % d).IsChecked()])
         opener['days'] = days
         opener['enabled'] = self.enabled.IsChecked()
         self.lst.SetItemText(idx, self.name.GetValue())
-
 
     def OnEnableCheck(self, event):
         """Update appearance of item after changing enable checkbox."""
 
         self.lst.enableItem(self.idx, event.IsChecked())
 
-
     def write(self, config):
         """Save preferences."""
         if self.idx is not None:
             self.lst.Select(self.idx, False)
         config.setWebOpeners(self.web_openers)
-
 
 
 class PrefsDialog(wx.Dialog):
@@ -804,13 +778,12 @@ class PrefsDialog(wx.Dialog):
         notebook.AddPage(self.webpuzzle, "Web Puzzles")
         notebook.AddPage(self.startup, "Startup")
 
-        sizer=wx.BoxSizer(wx.VERTICAL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(notebook)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
         self.Bind(wx.EVT_CLOSE, self.OnClose)
-
 
     def OnClose(self, event):
         """Close and save prefs."""
@@ -822,7 +795,6 @@ class PrefsDialog(wx.Dialog):
         self.webpuzzle.write(self.config)
         self.Destroy()
         self.EndModal(wx.ID_OK)
-
 
 
 def showPrefsDialog(config):
@@ -840,9 +812,9 @@ def showPrefsDialog(config):
             w.UpdatePrefs()
 
 
-
 if __name__ == "__main__":
     app = wx.App()
     from xsocius.gui.config import XsociusConfig
+
     xconfig = XsociusConfig()
     showPrefsDialog(xconfig)

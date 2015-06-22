@@ -2,6 +2,7 @@
 
 import wx
 
+
 class ClipboardMixin:
     """Mixin class to provide clipboard access for puzzle window."""
 
@@ -10,7 +11,6 @@ class ClipboardMixin:
         # Update menus to reflect possibility of paste
 
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdatePaste)
-
 
     def OnUpdatePaste(self, event):
         """Update paste menu options to reflect state of system."""
@@ -21,7 +21,6 @@ class ClipboardMixin:
         else:
             event.Skip()
 
-
     def _setClipboardText(self, text):
         """Set text on clipboard."""
 
@@ -30,7 +29,6 @@ class ClipboardMixin:
         if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
             wx.TheClipboard.SetData(data_o)
             wx.TheClipboard.Close()
-
 
     def _getClipboardText(self):
         """Get text from clipboard."""
@@ -49,31 +47,27 @@ class ClipboardMixin:
         else:
             return ''
 
-
     def OnCut(self, event):
         """Cut word."""
-        
+
         self._setClipboardText(self.puzzle.curr_word_text())
         self.puzzle.clear_curr_word()
         self.board.DrawNow()
-    
 
     def OnCopy(self, event):
         """Copy word."""
-        
+
         self._setClipboardText(self.puzzle.curr_word_text())
-    
 
     def OnPaste(self, event):
         """Paste word."""
-        
+
         word = self._getClipboardText()
         self.puzzle.fill_curr_word(word)
         self.board.DrawNow()
 
-
     def OnClear(self, event):
         """Clear word."""
-        
+
         self.puzzle.clear_curr_word()
         self.board.DrawNow()

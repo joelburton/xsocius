@@ -12,22 +12,24 @@ application.
 """
 
 import sys
-import os.path
 import logging
 import datetime
 import traceback
+
+import os.path
 from xsocius.utils import NAME
+
 
 # Try to get wx and our bug reporting window but if we can't, it's ok
 
 try:
     import wx
     import xsocius.gui.bugreport
+
     HAS_WX = True
 
 except:
     HAS_WX = False
-
 
 log_file = None
 err_file = None
@@ -49,31 +51,32 @@ def oh_fuck(typ, val, tb):
     # write error to file
     try:
         with open(log_path('crash'), 'w') as f:
-             f.write(tbs)
+            f.write(tbs)
     except Exception:
         pass
- 
+
     if HAS_WX:
         # write error to popup dialog
         dlg = wx.MessageDialog(
-                None, 
-                "A serious error has occurred: %s.\n\n\n" % val +
-                tbs + 
-                "\n\nAfter this message, you should have a chance" +
-                " to report it to the developer, and then %s will quit.\n" % NAME,
-                "Crash Report", 
-                wx.ICON_HAND)
+            None,
+            "A serious error has occurred: %s.\n\n\n" % val +
+            tbs +
+            "\n\nAfter this message, you should have a chance" +
+            " to report it to the developer, and then %s will quit.\n" % NAME,
+            "Crash Report",
+            wx.ICON_HAND)
         dlg.ShowModal()
         dlg.Destroy()
         try:
             if not DEBUG_MODE:
                 xsocius.gui.bugreport.showBugReport(
-                        config=wx.GetApp().config,
-                        error=tbs)
+                    config=wx.GetApp().config,
+                    error=tbs)
         except Exception:
             pass
 
-    os._exit(1) # close the program
+    os._exit(1)  # close the program
+
 
 sys.excepthook = oh_fuck
 
@@ -90,12 +93,12 @@ def setup_logging():
     if not DEBUG_MODE:
         log_file = log_path('log')
         logging.basicConfig(filename=log_file,
-                            level=logging.DEBUG, 
+                            level=logging.DEBUG,
                             format="%(levelname)-8s %(message)s")
         return log_file
 
     else:
-        logging.basicConfig(level=logging.DEBUG, 
+        logging.basicConfig(level=logging.DEBUG,
                             format="%(levelname)-8s %(message)s")
         return None
 
@@ -109,5 +112,5 @@ def log_path(logtype):
     name = NAME.lower()
     dtime = datetime.datetime.today().strftime('%Y-%m-%d-%H-%M-%S')
     home = os.path.expanduser("~")
-    fname = "{}-{}-{}.txt".format( name, dtime, logtype )
+    fname = "{}-{}-{}.txt".format(name, dtime, logtype)
     return os.path.join(home, fname)

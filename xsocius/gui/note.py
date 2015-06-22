@@ -29,12 +29,10 @@ class NoteWindow(wx.Frame):
         self.Raise()
         wx.GetApp().SetTopWindow(self)
 
-
     def OnClose(self, event):
         """Close and destroy."""
 
         self.Destroy()
-
 
     def OnQuit(self, event):
         """Quit application."""

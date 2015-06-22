@@ -21,7 +21,7 @@ class UndoQueue(object):
     """
 
     def __init__(self, state, max_steps=9):
-        self._undo = deque([state], max_steps+1)
+        self._undo = deque([state], max_steps + 1)
         self._redo = deque()
 
     def add(self, state):
@@ -37,7 +37,7 @@ class UndoQueue(object):
         return self._undo[-1]
 
     def redo(self):
-        """Redo previously-undone state (& append current state to undo q).""" 
+        """Redo previously-undone state (& append current state to undo q)."""
 
         item = self._redo.pop()
         self._undo.append(item)

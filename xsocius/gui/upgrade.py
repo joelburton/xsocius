@@ -3,16 +3,17 @@
 import sys
 import logging
 import webbrowser
-import urllib.request, urllib.parse, urllib.error
-import tempfile
+import urllib.request
+import urllib.parse
+import urllib.error
 import zipfile
-import os.path
-import shutil
 from xml.etree import ElementTree
 
+import tempfile
+import os.path
+import shutil
 import wx
 import wx.lib.agw.pybusyinfo as PBI
-
 from xsocius.utils import VERSION_URL, VERSION, NAME, URL
 from xsocius.gui.utils import makeHeading, makeText
 from xsocius.log import DEBUG_MODE
@@ -33,20 +34,20 @@ class UpgradeDialog(wx.Dialog):
     #      [ok] [cancel]
 
     def __init__(self, parent, version, change, date):
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, 
-                title="New Version Available: %s" % version)
+        wx.Dialog.__init__(self, parent, wx.ID_ANY,
+                           title="New Version Available: %s" % version)
 
         title = makeHeading(self, "A newer version of %s is available!" % NAME)
         explain = makeText(self,
-            "You are using version %s" % VERSION + 
-            "; the latest is %s." % version + "\n\n" +
-            "It was released on %s." % date +
-            " Overview of latest version:")
+                           "You are using version %s" % VERSION +
+                           "; the latest is %s." % version + "\n\n" +
+                           "It was released on %s." % date +
+                           " Overview of latest version:")
         upgrade = wx.TextCtrl(self, wx.ID_ANY,
-                style=wx.TE_MULTILINE|wx.TE_READONLY)
+                              style=wx.TE_MULTILINE | wx.TE_READONLY)
         upgrade.SetValue(change)
-        upgrade.SetMinSize((10,120))
-        #upgrade.Enable(False)
+        upgrade.SetMinSize((10, 120))
+        # upgrade.Enable(False)
         offer = makeText(self, "Would you like to download?")
 
         # Add Ok/Cancel buttons
@@ -59,24 +60,23 @@ class UpgradeDialog(wx.Dialog):
         btnsizer.Realize()
 
         outsizer = wx.BoxSizer(wx.VERTICAL)
-        outsizer.AddMany( [
-                (title, 0, wx.TOP|wx.LEFT|wx.RIGHT, 30),
-                (10,10),
-                (explain, 0, wx.LEFT|wx.RIGHT, 30),
-                (10,10),
-                (upgrade, 0, wx.LEFT|wx.RIGHT|wx.EXPAND, 30),
-                (20,20),
-                (offer, 0, wx.LEFT|wx.RIGHT, 30),
-                (15,15),
-                (btnsizer, 0, wx.ALIGN_RIGHT|wx.RIGHT, 20),
-                (20,20),
-                ])
-        
+        outsizer.AddMany([
+            (title, 0, wx.TOP | wx.LEFT | wx.RIGHT, 30),
+            (10, 10),
+            (explain, 0, wx.LEFT | wx.RIGHT, 30),
+            (10, 10),
+            (upgrade, 0, wx.LEFT | wx.RIGHT | wx.EXPAND, 30),
+            (20, 20),
+            (offer, 0, wx.LEFT | wx.RIGHT, 30),
+            (15, 15),
+            (btnsizer, 0, wx.ALIGN_RIGHT | wx.RIGHT, 20),
+            (20, 20),
+        ])
+
         self.SetSizer(outsizer)
         outsizer.Fit(self)
         self.CenterOnScreen()
         upgrade.Bind(wx.EVT_SET_FOCUS, self.moveFocus, upgrade)
-
 
     def moveFocus(self, event):
         """Move focus to OK button."""
@@ -93,8 +93,8 @@ def newest_version_info():
     try:
         data = urllib.request.urlopen(VERSION_URL).read()
     except Exception as err:
-        logging.error("Unable to get latest version info at %s: %s", 
-                VERSION_URL, err)
+        logging.error("Unable to get latest version info at %s: %s",
+                      VERSION_URL, err)
         return (None, None, None)
 
     # version.xml contains the new version #, a change msg, and the date:
@@ -153,7 +153,7 @@ def prompt_update_version(window, version, change, date):
             wx.MessageBox(
                 "In-place upgrade failed: %s.\n\n" % e +
                 "You should do a manual upgrade."
-                )
+            )
             webbrowser.open(URL, new=2)
         else:
             del busy
@@ -183,7 +183,7 @@ def get_changes_files(currver, newver):
     if nmaj != cmaj or nmin != cmin:
         logging.debug("Not patch level upgrade; manual required.")
         return
-    
+
     name = NAME.lower()
     tmpdir = tempfile.mkdtemp()
 
@@ -193,7 +193,7 @@ def get_changes_files(currver, newver):
 
     for kind in ['lib', 'help']:
         url = "{url}/{name}-{ver}-{kind}.zip".format(
-                url=URL, name=name, ver=newver, kind=kind)
+            url=URL, name=name, ver=newver, kind=kind)
         path = os.path.join(tmpdir, kind) + '.zip'
         logging.info("Trying %s changes file at %s", kind, url)
         try:
@@ -215,7 +215,7 @@ def get_changes_files(currver, newver):
 
     return tmpdir, retfiles[0], retfiles[1]
 
-        
+
 def apply_changes(tmpdir, libchanges, helpchanges, currver, newver):
     """Given library and help changes, apply."""
 
@@ -228,8 +228,8 @@ def apply_changes(tmpdir, libchanges, helpchanges, currver, newver):
 
     # find our site-packages.zip
     for path in sys.path:
-        if ( path.endswith("/python34.zip") or
-             path.endswith(r"\library.zip") ):
+        if (path.endswith("/python34.zip") or
+                path.endswith(r"\library.zip")):
             break
     else:
         raise UpgradeException("Cannot find library in our sys.path")
@@ -251,7 +251,7 @@ def apply_changes(tmpdir, libchanges, helpchanges, currver, newver):
             # XXX: for Windows, we create .pyc files, not .pyo files
             # but the base has .pyc files, so let's rename them .pyo.
             # ugh. hackity hack hack.
-             
+
             if wx.Platform == '__WXMSW__':
                 new_name = changed_file.replace('.pyo', '.pyc')
             else:
@@ -260,7 +260,7 @@ def apply_changes(tmpdir, libchanges, helpchanges, currver, newver):
             logging.debug("Upgrading %s: %s", path, new_name)
 
             site_packages.write(
-                    os.path.join(tmpdir, changed_file), new_name)
+                os.path.join(tmpdir, changed_file), new_name)
         site_packages.close()
 
     except Exception as e:
@@ -306,4 +306,3 @@ def apply_changes(tmpdir, libchanges, helpchanges, currver, newver):
         logging.debug("Plist updated.")
 
     logging.debug("Upgrade done.")
-

@@ -20,11 +20,11 @@ img = wx.Image(get_icon("%s.gif" % NAME.lower()))
 bmp = img.ConvertToBitmap()
 app = wx.App()
 splash = wx.adv.SplashScreen(
-        bmp, 
-        wx.adv.SPLASH_CENTRE_ON_SCREEN|wx.adv.SPLASH_TIMEOUT, 
-        100,   # 1/10th of a second
-        None)
-del(app)
+    bmp,
+    wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,
+    100,  # 1/10th of a second
+    None)
+del (app)
 
 import xsocius.gui.app
 
