@@ -29,7 +29,7 @@ Requirements: Python 3.4
 ::
 
   virtualenv-3.4 env
-  pip install -r requirements.txt
+  pip install -r osx-requirements.txt
 
 
 Edit installed files as suggested at:
@@ -62,7 +62,7 @@ Make virtualenv::
 
 Install requirements::
 
-  pip install -r wrequirements.txt --trusted-host wxpython.org
+  pip install -r win-requirements.txt --trusted-host wxpython.org
 
 To run from console::
 
@@ -71,3 +71,14 @@ To run from console::
 To build, you need Innoinstaller (open source)::
 
   python make.py
+
+
+Linux
++++++
+
+Requirements: Python 3.4, normal building tools
+
+Install requirements::
+
+  sudo apt-get install dpkg-dev build-essential libwebkitgtk-dev libjpeg-dev libtiff-dev libgtk2.0-dev libsdl1.2-dev libgstreamer-plugins-base0.10-dev freeglut3 freeglut3-dev
+  pip install -r linux-requirements.txt --trusted-host wxpython.org
