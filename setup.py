@@ -261,6 +261,7 @@ Name: "{group}\Uninstall %(NAME)s"; Filename: "{uninstallexe}"
 # --------------------------------- UNLOCKER -----------------------------------
 
 def build_unlocker():
+    from Cython.Distutils import build_ext
     print("\n\nIMPORTANT: "
           "This doesn't build all of this program, just the unlocker.\n\n")
     ext_modules = [Extension("unlocker", ["unlocker.pyx"])]
