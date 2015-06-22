@@ -3,9 +3,7 @@ XSocius: Desktop Collaborative Crossword Player
 
 :Author: Joel Burton <joel@joelburton.com>
 
-.. raw:: html
-
-  <img src="http://joelburton.users.sonic.net/xsocius/xsocius.gif">
+.. image:: http://joelburton.users.sonic.net/xsocius/xsocius.gif
 
 Help
 ----
