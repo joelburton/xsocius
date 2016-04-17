@@ -33,7 +33,7 @@ from make import ALL
 
 # --- find differences for change file
 
-LIB = '/Contents/Resources/lib/python34.zip'
+LIB = '/Contents/Resources/lib/python35.zip'
 PLIST = '/Contents/Info.plist'
 
 
@@ -115,7 +115,7 @@ def make_change(name, old_ver, version, new=None):
     for fname in new_files:
         if (fname == PLIST
             or fname.endswith('site.pyo')
-            or fname.endswith('python34.zip')
+            or fname.endswith('python35.zip')
             or fname.endswith('.so')
             or fname.endswith('.dylib')
             or fname.endswith('.buildinfo')

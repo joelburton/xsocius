@@ -2,6 +2,7 @@
 
 import sys
 import pprint
+import logging
 
 import io
 import wx
@@ -49,6 +50,8 @@ def _read_file(fname):
 
 
 def showBugReport(config, error=""):
+    logging.debug("Show bug report.")
+
     sys.stderr.flush()
 
     _ = {'wxver': wx.version(),

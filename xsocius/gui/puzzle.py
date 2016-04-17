@@ -142,6 +142,8 @@ class PuzzleWindow(BaseWindow,
         self.cluetext = self.puzzletitle = self.puzzlecopyright = self.pen_button \
             = self.timer_button = None
 
+        # self.Show()
+
     def size_clue_text(self):
         """Set size of clue text, partially based on window size."""
 
@@ -314,7 +316,7 @@ class PuzzleWindow(BaseWindow,
 
         logging.debug("hover off clue")
         try:
-            self.hoverclue.Destroy()
+            assert self.hoverclue.Destroy()
         except Exception:
             pass
 
@@ -340,7 +342,7 @@ class PuzzleWindow(BaseWindow,
             "Scrambled Puzzle",
             style=wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
-        dlg.Destroy()
+        assert dlg.Destroy()
 
         if not wx.GetApp().config.no_unlock:
             self.GetMenuBar().FindItemById(self.ID_UNLOCK).Enable(True)
@@ -475,7 +477,7 @@ class PuzzleWindow(BaseWindow,
                                    'Save Changes?',
                                    wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION)
             result = dlg.ShowModal()
-            dlg.Destroy()
+            assert dlg.Destroy()
             if result == wx.ID_CANCEL:
                 return False
             elif result == wx.ID_YES:
@@ -488,7 +490,7 @@ class PuzzleWindow(BaseWindow,
         self.stop_timer()
         if self.xmpp:
             self.XMPPDisconnect()
-        self.Destroy()
+        assert self.Destroy()
         wx.GetApp().windows.remove(self)
 
     def OnClose(self, event):
@@ -499,6 +501,7 @@ class PuzzleWindow(BaseWindow,
 
         # If no windows open, show dummy
         if not wx.GetApp().windows:
+            logging.debug("reopening dummy after puzzle close")
             wx.GetApp().OpenDummy()
 
         logging.debug("On close done")
@@ -515,7 +518,7 @@ class PuzzleWindow(BaseWindow,
             dlg = wx.MessageDialog(None, "Fail saved: %s" % e,
                                    "Save Error", wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
-            dlg.Destroy()
+            assert dlg.Destroy()
             return
 
     def OnSave(self, event):
@@ -541,7 +544,7 @@ class PuzzleWindow(BaseWindow,
             path = dlg.GetPath()
             self._save_puzzle(path=path)
 
-        dlg.Destroy()
+        assert dlg.Destroy()
 
     def OnRevert(self, event):
         """Revert to saved version of puzzle."""
@@ -564,7 +567,7 @@ class PuzzleWindow(BaseWindow,
                                "Clear Grid?",
                                wx.OK | wx.CANCEL)
         result = dlg.ShowModal()
-        dlg.Destroy()
+        assert dlg.Destroy()
         if result == wx.ID_CANCEL:
             return
 
@@ -655,7 +658,7 @@ class PuzzleWindow(BaseWindow,
                                    "\n\nUnlock puzzle?",
                                    "Unlock Puzzle?", wx.OK | wx.CANCEL)
             result = dlg.ShowModal()
-            dlg.Destroy()
+            assert dlg.Destroy()
 
             if result != wx.ID_OK:
                 return
@@ -687,7 +690,7 @@ class PuzzleWindow(BaseWindow,
                     (keep_going, skip) = dlg.Update(key - 1000)
                 key += 1
 
-            dlg.Destroy()
+            assert dlg.Destroy()
 
             # busy = PBI.PyBusyInfo("Decrypting; please wait...")
             # wx.Yield()
@@ -859,7 +862,7 @@ class PuzzleWindow(BaseWindow,
                                    'Puzzle Finished',
                                    wx.OK | wx.ICON_INFORMATION)
             dlg.ShowModal()
-            dlg.Destroy()
+            assert dlg.Destroy()
 
         for direction, idx, filled in self.puzzle.clues_completed_queue:
             if direction == "across":

@@ -2,7 +2,7 @@
 
 # Configurable stuff
 
-NAME = "Xsocius"
+NAME = "MooseWords"
 VERSION = "3.1.1"
 URL = "http://joelburton.users.sonic.net/%s" % NAME.lower()
 VERSION_URL = URL + "/version.xml"

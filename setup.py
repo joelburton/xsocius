@@ -105,9 +105,12 @@ def build_osx_app():
         app=[APP, ],
         options={
             'py2app': dict(iconfile=ICNS,
-                           argv_emulation=True,
+                           # This used to be true, but that may have caused the
+                           # frames-not-to-appear (http://stackoverflow.com/questions/23763726/py2app-prevents-wxpython-opening-second-wx-frame)
+                           argv_emulation=False,
                            arch='x86_64',
-                           optimize=2,
+                           # with move to Py3.5, optimize wouldn't let Python run at all
+                           # optimize=2,
                            compressed=True,
                            excludes="xsocius/help",
                            plist=_plist)},
@@ -133,10 +136,10 @@ def build_osx_app():
     temp_zip = '%s/new.zip' % temp_dir
 
     lib_path = 'dist/%s.app/Contents/Resources/lib' % NAME
-    lib_zip_path = lib_path + '/python34.zip'
+    lib_zip_path = lib_path + '/python35.zip'
     dylib = 'libwx_osx_cocoau-3.0.0.3.0.dylib'
     dylib_temp_dir = '%s/wx/%s' % (temp_dir, dylib)
-    dylib_new_dir = '%s/python3.4/lib-dynload/wx/%s' % (lib_path, dylib)
+    dylib_new_dir = '%s/python3.5/lib-dynload/wx/%s' % (lib_path, dylib)
 
     # Unzip lib zip to temp dir
 
@@ -168,7 +171,7 @@ def build_osx_app():
     shutil.rmtree(temp_dir)
 
     # At this point, we have a functional OSX app -- however, it's rather bloated, as it contains
-    #  code for alternate architectures (like i386) We'll use "ditto" to strip out the other
+    # code for alternate architectures (like i386) We'll use "ditto" to strip out the other
     # architectures, making the app about half the size.
     #
     # Then, we use hdiutil to make a .dmg of it, which is used by users to install the app.
@@ -254,7 +257,7 @@ Name: "{group}\%(NAME)s"; Filename: "{app}\%(NAME)s.exe"
 Name: "{group}\Uninstall %(NAME)s"; Filename: "{uninstallexe}"
 """ % {'NAME': NAME, 'URL': URL, 'VERSION': VERSION}
 
-    with open("build/exe.win32-3.4/installer.iss", "w") as f:
+    with open("build/exe.win32-3.5/installer.iss", "w") as f:
         f.write(iss)
 
 
@@ -272,7 +275,7 @@ def build_unlocker():
         ext_modules=ext_modules
     )
 
-    shutil.move('build/lib.macosx-10.10-x86_64-3.4/unlocker.so',
+    shutil.move('build/lib.macosx-10.10-x86_64-3.5/unlocker.so',
                 'xsocius/unlocker.so')
 
 # ---------------------------------- RUNNER ------------------------------------

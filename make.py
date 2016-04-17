@@ -161,7 +161,7 @@ def build(name, fast=False, make_docs=True):
         # Windows: make docs, make exe, turn into installer
 
         if make_docs:
-            os.system(r"c:\Python34\Scripts\sphinx-build.exe -b singlehtml"
+            os.system(r"c:\Python35\Scripts\sphinx-build.exe -b singlehtml"
                       r" -d help\_build\doctrees help xsocius\help")
             decrap_help(name)
         try:
@@ -171,8 +171,8 @@ def build(name, fast=False, make_docs=True):
 
         os.system(r"python -OO setup.py build_exe")
         os.system(
-            r'"c:\Program Files (x86)\Inno Setup 5\ISCC.exe" build\exe.win32-3.4\installer.iss')
-        shutil.copyfile("build/exe.win32-3.4/Output/setup.exe",
+            r'"c:\Program Files (x86)\Inno Setup 5\ISCC.exe" build\exe.win32-3.5\installer.iss')
+        shutil.copyfile("build/exe.win32-3.5/Output/setup.exe",
                         "upload/%s-%s.exe" % (name.lower(), version))
 
     elif wx.Platform == "__WXMAC__":
@@ -213,10 +213,10 @@ def build(name, fast=False, make_docs=True):
         # Linux: make docs, make bdist_egg
 
         if make_docs:
-            os.system("sphinx-build-3.4 -b singlehtml -d help/_build/doctrees help xsocius/help")
+            os.system("sphinx-build-3.5 -b singlehtml -d help/_build/doctrees help xsocius/help")
             decrap_help(name)
         os.system("rm dist/*egg")
-        os.system("python3.4 setup.py bdist_egg")
+        os.system("python3.5 setup.py bdist_egg")
         os.system("cp dist/*egg upload/%s-%s.egg" % (name.lower(), version))
 
 

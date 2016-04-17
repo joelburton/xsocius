@@ -19,7 +19,7 @@ class BaseWindow(wx.Frame, JoinWindowMixin):
 
     def __init__(self,
                  title,
-                 pos=(-1, -1),
+                 pos=(1, 1),
                  style=wx.DEFAULT_FRAME_STYLE,
                  size=(700, 500)):
         wx.Frame.__init__(self,
@@ -53,6 +53,8 @@ class DummyWindow(BaseWindow):
     dummy = True
 
     def __init__(self):
+        logging.debug("Making dummy window")
+
         BaseWindow.__init__(self, title=NAME, size=(200, 200),
                             style=wx.DEFAULT_FRAME_STYLE & ~(
                             wx.RESIZE_BORDER | wx.MAXIMIZE_BOX | wx.MINIMIZE_BOX)
@@ -108,11 +110,18 @@ class DummyWindow(BaseWindow):
         sizer1.Add(sizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
 
         panel.SetSizer(sizer1)
+        panel.Raise()
+        panel.Fit()
+        panel.Show()
+
         sizer1.Fit(self)
         self.CenterOnScreen()
+        self.Show()
+
+        logging.debug("Is shown: %s" % self.IsShown())
 
     def OnClose(self, event):
         """Close dummy window."""
 
         wx.GetApp().config.filehistory.RemoveMenu(self.RecentMenu)
-        self.Destroy()
+        assert self.Destroy()

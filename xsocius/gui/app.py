@@ -144,9 +144,9 @@ class XsociusApp(wx.App):
 
         dummy = DummyWindow()
         self.windows.append(dummy)
-        dummy.Show()
         dummy.Raise()
         self.SetTopWindow(dummy)
+        dummy.Show()
         return dummy
 
     def OnExit(self):
